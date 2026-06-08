@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benchmark: Modelo de Remuneração de Escritórios Jurídicos · Nexa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  --se:   #1E3A28;
+  --sp:   #4A7459;
+  --sm:   #7FA88A;
+  --sc:   #C2D9C8;
+  --sf:   #EDF4EF;
+  --ow:   #F5F3F0;
+  --ambar:#C4710F;
+  --amb-lt:#FBF0E0;
+  --preto:#1A1A1A;
+  --graf: #4A4A4A;
+  --brd:  #DDE8DF;
+  --rd:   #8B2A2A;
+  --rd-lt:#FFE5E5;
+  --fh:   'Archivo', sans-serif;
+  --fb:   'Plus Jakarta Sans', sans-serif;
+  --r:    12px;
+  --sh:   0 2px 20px rgba(30,58,40,.08);
+  --sh2:  0 8px 40px rgba(30,58,40,.12);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--fb); background: var(--ow); color: var(--preto); line-height: 1.65; min-height: 100vh; }
+
+/* ── HEADER ──────────────────────────────────────────────────────── */
+.hdr {
+  background: var(--se); color: #fff;
+  padding: 0 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; position: sticky; top: 0; z-index: 200;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-text { display: flex; flex-direction: column; gap: 1px; }
+.bn { font-family: var(--fh); font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.bs { font-size: .58rem; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; opacity: .55; }
+.hdr-right { font-size: .72rem; color: rgba(255,255,255,.45); font-family: var(--fb); }
+
+/* ── HERO ────────────────────────────────────────────────────────── */
+.hero {
+  background: var(--se);
+  color: #fff;
+  padding: 5rem 2.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex; align-items: center;
+}
+/* animated nexo background */
+.hero-bg {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.hero-bg canvas {
+  width: 100%; height: 100%;
+  opacity: .12;
+}
+/* left accent bar */
+.hero::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, var(--ambar), transparent);
+}
+.hero-in {
+  max-width: 780px;
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 1.75rem;
+}
+.hero-eyebrow-line {
+  width: 24px; height: 1px;
+  background: var(--ambar);
+}
+.hero-eyebrow-text {
+  font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ambar);
+  font-family: var(--fb);
+}
+.hero h1 {
+  font-family: var(--fh);
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .line2 { display: block; }
+.hero h1 .accent {
+  color: var(--ambar);
+  font-style: italic;
+}
+.hero-body {
+  max-width: 560px;
+  margin-bottom: 2.5rem;
+}
+.hero-body p {
+  font-size: .95rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,.72);
+  margin-bottom: .85rem;
+}
+.hero-body p:last-child { margin-bottom: 0; }
+.hero-body strong { color: #fff; font-weight: 600; }
+.hero-stats {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hero-stat .val {
+  font-family: var(--fh);
+  font-size: 1.6rem; font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+.hero-stat .lbl {
+  font-size: .68rem; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  font-family: var(--fb);
+}
+.hero-divider {
+  width: 1px; height: 40px;
+  background: rgba(255,255,255,.12);
+  align-self: center;
+}
+
+/* ── PROGRESS ────────────────────────────────────────────────────── */
+.prog-wrap {
+  background: var(--se);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  padding: .6rem 2.5rem;
+  position: sticky; top: 60px; z-index: 190;
+  display: flex; align-items: center; gap: 1rem;
+}
+.prog-lbl {
+  font-size: .65rem; font-weight: 600;
+  color: rgba(255,255,255,.4);
+  text-transform: uppercase; letter-spacing: .1em;
+  font-family: var(--fb); white-space: nowrap;
+}
+.prog-track {
+  flex: 1; height: 2px;
+  background: rgba(255,255,255,.1);
+  border-radius: 2px; overflow: hidden;
+}
+.prog-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ambar), var(--sm));
+  border-radius: 2px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+.prog-pct {
+  font-size: .7rem; font-weight: 700;
+  color: rgba(255,255,255,.55);
+  min-width: 32px; text-align: right;
+  font-family: var(--fh);
+}
+
+/* ── CONTAINER ───────────────────────────────────────────────────── */
+.container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 8rem; }
+
+/* ── SECTION CARD ────────────────────────────────────────────────── */
+.sc {
+  background: #fff;
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: var(--sh);
+  animation: up .4s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.sc-head {
+  padding: 1.1rem 1.75rem;
+  border-bottom: 1px solid var(--brd);
+  display: flex; align-items: center; gap: .85rem;
+  background: linear-gradient(135deg, var(--sf) 0%, #fff 100%);
+}
+.sc-num {
+  width: 26px; height: 26px;
+  background: var(--se); color: #fff;
+  border-radius: 6px;
+  font-size: .68rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: var(--fh);
+  letter-spacing: .02em;
+}
+.sc-title { font-family: var(--fh); font-size: .88rem; font-weight: 700; color: var(--se); letter-spacing: -.01em; }
+.sc-subtitle { font-size: .75rem; color: var(--sm); font-family: var(--fb); margin-top: 1px; }
+.sc-body { padding: 1.75rem; }
+
+/* ── QUESTION ────────────────────────────────────────────────────── */
+.q { margin-bottom: 1.8rem; }
+.q:last-child { margin-bottom: 0; }
+.q-lbl {
+  font-size: .875rem; font-weight: 600; color: var(--preto);
+  margin-bottom: .65rem; line-height: 1.45;
+  font-family: var(--fb);
+}
+.q-lbl .num { color: var(--ambar); font-family: var(--fh); font-weight: 700; margin-right: .3rem; }
+.q-lbl .req { color: var(--ambar); font-size: .65rem; margin-left: 2px; vertical-align: super; }
+.q-hint {
+  font-size: .75rem; color: var(--sm);
+  margin-bottom: .6rem; font-style: italic;
+  line-height: 1.5;
+}
+.q-example {
+  font-size: .73rem; color: var(--graf);
+  background: var(--sf); border-left: 2px solid var(--sc);
+  padding: .45rem .7rem; border-radius: 0 6px 6px 0;
+  margin-bottom: .65rem; font-style: italic;
+}
+.err-msg { color: var(--rd); font-size: .72rem; margin-top: .3rem; display: none; }
+.err-msg.on { display: block; }
+
+/* ── DIVIDER ─────────────────────────────────────────────────────── */
+.q-divider { height: 1px; background: var(--brd); margin: 1.5rem 0; }
+
+/* ── INPUTS ──────────────────────────────────────────────────────── */
+input[type=text], input[type=number], textarea, select {
+  width: 100%;
+  font-family: var(--fb); font-size: .875rem; color: var(--preto);
+  background: var(--ow);
+  border: 1.5px solid var(--brd);
+  border-radius: 8px;
+  padding: .65rem .9rem;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--sp);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(74,116,89,.1);
+}
+textarea { resize: vertical; min-height: 90px; }
+input[type=number] { width: 100px; }
+
+/* ── RADIO / CHECKBOX ────────────────────────────────────────────── */
+.opts { display: flex; flex-direction: column; gap: .4rem; }
+.opts.two { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+.opts.three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .4rem; }
+.opt {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .6rem .9rem;
+  border: 1.5px solid var(--brd);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .15s;
+  font-size: .845rem; color: var(--graf);
+  user-select: none; font-family: var(--fb);
+}
+.opt:hover { border-color: var(--sp); background: var(--sf); color: var(--se); }
+.opt input { display: none; }
+.dot {
+  width: 16px; height: 16px;
+  border: 2px solid var(--brd);
+  border-radius: 50%; flex-shrink: 0;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.box {
+  width: 16px; height: 16px;
+  border: 2px solid var(--brd);
+  border-radius: 4px; flex-shrink: 0;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.opt.sel { border-color: var(--sp); background: var(--sf); color: var(--se); font-weight: 500; }
+.opt.sel .dot { border-color: var(--sp); background: var(--sp); }
+.opt.sel .dot::after { content:''; width:5px; height:5px; background:#fff; border-radius:50%; }
+.opt.sel .box { border-color: var(--sp); background: var(--sp); }
+.opt.sel .box::after { content:'✓'; color:#fff; font-size:10px; line-height:1; }
+.opt-hint { font-size: .72rem; color: var(--sm); margin-top: 1px; display: block; }
+
+/* ── LIMIT BADGE ─────────────────────────────────────────────────── */
+.limit-badge {
+  display: inline-block;
+  background: var(--amb-lt); color: var(--ambar);
+  border: 1px solid rgba(196,113,15,.2);
+  font-size: .68rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  margin-left: .35rem; vertical-align: middle;
+  font-family: var(--fb);
+}
+.limit-note { font-size: .72rem; color: var(--ambar); margin-top: .3rem; display: none; }
+.limit-note.on { display: block; }
+
+/* ── SCALE ───────────────────────────────────────────────────────── */
+.scale-row { display: flex; gap: .35rem; }
+.scale-btn {
+  flex: 1; padding: .7rem .25rem;
+  border: 1.5px solid var(--brd);
+  border-radius: 8px; background: var(--ow);
+  cursor: pointer; text-align: center;
+  font-size: .9rem; font-family: var(--fh); font-weight: 700; color: var(--graf);
+  transition: all .15s;
+}
+.scale-btn:hover { border-color: var(--sp); color: var(--se); background: var(--sf); }
+.scale-btn.sel { border-color: var(--sp); background: var(--sp); color: #fff; }
+.scale-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--sm); margin-top: .35rem; }
+
+/* ── MATRIX ──────────────────────────────────────────────────────── */
+.matrix-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: .1rem; }
+.matrix {
+  width: 100%; border-collapse: collapse;
+  font-size: .8rem; min-width: 520px;
+}
+.matrix th {
+  padding: .6rem .7rem;
+  text-align: center;
+  font-weight: 600; font-size: .72rem;
+  color: #fff; background: var(--se);
+  white-space: nowrap;
+}
+.matrix th:first-child {
+  text-align: left;
+  background: var(--se);
+  min-width: 180px;
+}
+.matrix td {
+  padding: .55rem .7rem;
+  border-bottom: 1px solid var(--brd);
+  vertical-align: middle;
+}
+.matrix td:first-child {
+  font-weight: 500; color: var(--preto);
+  background: var(--sf);
+  border-right: 1px solid var(--brd);
+}
+.matrix tr:last-child td { border-bottom: none; }
+.matrix tr:hover td { background: #fafaf8; }
+.matrix tr:hover td:first-child { background: var(--sc); }
+.matrix td.center { text-align: center; }
+.m-check {
+  width: 20px; height: 20px;
+  border: 2px solid var(--brd);
+  border-radius: 4px;
+  cursor: pointer; margin: 0 auto;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.m-check:hover { border-color: var(--sp); background: var(--sf); }
+.m-check.sel { border-color: var(--sp); background: var(--sp); }
+.m-check.sel::after { content:'✓'; color:#fff; font-size:11px; line-height:1; }
+.m-radio {
+  width: 20px; height: 20px;
+  border: 2px solid var(--brd);
+  border-radius: 50%;
+  cursor: pointer; margin: 0 auto;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.m-radio:hover { border-color: var(--sp); }
+.m-radio.sel { border-color: var(--sp); background: var(--sp); }
+.m-radio.sel::after { content:''; width:6px; height:6px; background:#fff; border-radius:50%; }
+/* dropdown in matrix */
+.m-select {
+  width: 100%; min-width: 130px;
+  font-family: var(--fb); font-size: .75rem; color: var(--preto);
+  background: #fff; border: 1.5px solid var(--brd);
+  border-radius: 6px; padding: .3rem .5rem; outline: none;
+  cursor: pointer;
+}
+.m-select:focus { border-color: var(--sp); }
+
+/* ── PCT ROW ─────────────────────────────────────────────────────── */
+.pct-row {
+  display: flex; align-items: center;
+  gap: .75rem; margin-bottom: .5rem;
+  padding: .55rem .85rem;
+  background: var(--ow); border: 1.5px solid var(--brd);
+  border-radius: 8px;
+}
+.pct-label { flex: 1; font-size: .845rem; color: var(--preto); font-family: var(--fb); font-weight: 500; }
+.pct-input {
+  width: 72px !important;
+  text-align: center;
+  font-family: var(--fh); font-weight: 700; color: var(--se);
+}
+.pct-unit { font-size: .8rem; color: var(--sm); font-weight: 600; flex-shrink: 0; }
+.pct-total {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: .5rem; padding: .5rem .85rem 0;
+  font-size: .78rem;
+}
+.pct-total .tot-lbl { color: var(--graf); }
+.pct-total .tot-val { font-family: var(--fh); font-weight: 700; font-size: .9rem; color: var(--se); }
+.pct-total .tot-val.over { color: var(--rd); }
+.pct-total .tot-val.ok { color: var(--sp); }
+
+/* ── CONDITIONAL ─────────────────────────────────────────────────── */
+.cond {
+  display: none;
+  margin-top: .75rem;
+  padding: 1rem 1.1rem;
+  background: var(--sf);
+  border-radius: 8px;
+  border-left: 3px solid var(--sc);
+}
+.cond.on { display: block; }
+.cond .q { margin-bottom: 1.2rem; }
+.cond .q:last-child { margin-bottom: 0; }
+
+/* ── LGPD CARD ───────────────────────────────────────────────────── */
+.lgpd {
+  background: #fff;
+  border: 1px solid var(--brd);
+  border-radius: var(--r);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: var(--sh);
+  animation: up .4s ease both;
+}
+.lgpd-top {
+  background: var(--se);
+  padding: 1.25rem 1.75rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.lgpd-icon {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.1);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.lgpd-top-text h2 {
+  font-family: var(--fh); font-size: 1rem; font-weight: 700; color: #fff;
+}
+.lgpd-top-text p {
+  font-size: .72rem; color: rgba(255,255,255,.55); font-family: var(--fb);
+  margin-top: 1px;
+}
+.lgpd-body { padding: 1.5rem 1.75rem; }
+.lgpd-body p {
+  font-size: .845rem; color: var(--graf);
+  margin-bottom: .7rem; line-height: 1.7;
+}
+.lgpd-body p:last-of-type { margin-bottom: 0; }
+.lgpd-body strong { color: var(--preto); }
+.lgpd-items {
+  margin: 1rem 0;
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.lgpd-item {
+  display: flex; align-items: flex-start; gap: .65rem;
+  font-size: .835rem; color: var(--graf); line-height: 1.6;
+}
+.lgpd-dot {
+  width: 6px; height: 6px;
+  background: var(--sm); border-radius: 50%;
+  margin-top: .45rem; flex-shrink: 0;
+}
+.lgpd-agree {
+  display: flex; align-items: flex-start; gap: .75rem;
+  padding: 1rem 1.1rem;
+  border: 1.5px solid var(--brd); border-radius: 8px;
+  cursor: pointer; transition: all .15s; margin-top: 1.25rem;
+  background: var(--ow);
+}
+.lgpd-agree:hover { border-color: var(--sp); background: var(--sf); }
+.lgpd-agree.sel { border-color: var(--sp); background: var(--sf); }
+.lgpd-agree input { display: none; }
+.lgpd-chk {
+  width: 20px; height: 20px;
+  border: 2px solid var(--brd); border-radius: 5px;
+  flex-shrink: 0; margin-top: 1px;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.lgpd-agree.sel .lgpd-chk { background: var(--sp); border-color: var(--sp); }
+.lgpd-agree.sel .lgpd-chk::after { content:'✓'; color:#fff; font-size:12px; line-height:1; }
+.lgpd-txt { font-size: .845rem; color: var(--preto); font-family: var(--fb); line-height: 1.6; }
+.lgpd-txt strong { color: var(--se); font-weight: 600; }
+
+/* ── SUBMIT / SUCCESS ────────────────────────────────────────────── */
+.submit-area {
+  background: #fff; border: 1px solid var(--brd);
+  border-radius: var(--r); padding: 2rem;
+  text-align: center; box-shadow: var(--sh);
+}
+.submit-area p { font-size: .82rem; color: var(--sm); margin-bottom: 1.25rem; max-width: 420px; margin-left: auto; margin-right: auto; }
+.btn-submit {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--se); color: #fff; border: none;
+  padding: .95rem 2.5rem; border-radius: 8px;
+  font-family: var(--fh); font-size: .95rem; font-weight: 700;
+  cursor: pointer; transition: all .2s; letter-spacing: -.01em;
+}
+.btn-submit:hover { background: var(--sp); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30,58,40,.2); }
+.btn-submit:disabled { background: var(--sc); color: var(--sm); cursor: not-allowed; transform: none; box-shadow: none; }
+.success-screen {
+  display: none; text-align: center;
+  padding: 5rem 2rem; background: #fff;
+  border: 1px solid var(--brd); border-radius: var(--r);
+  box-shadow: var(--sh);
+}
+.success-screen.on { display: block; }
+.success-icon {
+  width: 64px; height: 64px;
+  background: var(--sf); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  border: 2px solid var(--sc);
+}
+.success-screen h2 { font-family: var(--fh); font-size: 1.6rem; font-weight: 700; color: var(--se); margin-bottom: .6rem; letter-spacing: -.02em; }
+.success-screen p { color: var(--graf); font-size: .9rem; max-width: 460px; margin: 0 auto .5rem; line-height: 1.7; }
+.success-screen .email-note { font-size: .78rem; color: var(--sm); margin-top: 1rem; }
+.success-screen .email-note a { color: var(--ambar); font-weight: 600; text-decoration: none; }
+
+@media (max-width: 620px) {
+  .opts.two, .opts.three { grid-template-columns: 1fr; }
+  .scale-row { gap: .2rem; }
+  .scale-btn { font-size: .78rem; padding: .6rem .1rem; }
+  .hero { padding: 3.5rem 1.5rem 3rem; }
+  .sc-body { padding: 1.25rem; }
+  .hdr { padding: 0 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+<header class="hdr">
+  <div class="brand">
+    <div class="brand-mark">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="2.8" fill="#fff"/>
+        <circle cx="20" cy="20" r="4.8" stroke="#fff" stroke-width="1.1" fill="none"/>
+        <circle cx="7"  cy="13" r="2.1" fill="#7FA88A"/>
+        <circle cx="8"  cy="29" r="2.1" fill="#7FA88A"/>
+        <circle cx="20" cy="5"  r="1.7" fill="#7FA88A"/>
+        <circle cx="33" cy="13" r="2.1" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
+        <circle cx="35" cy="22" r="1.7" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
+        <circle cx="25" cy="34" r="1.7" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
+        <line x1="20" y1="20" x2="7"  y2="13" stroke="#fff" stroke-width=".9" opacity=".6"/>
+        <line x1="20" y1="20" x2="33" y2="13" stroke="#fff" stroke-width=".9" opacity=".6"/>
+        <line x1="20" y1="20" x2="8"  y2="29" stroke="#fff" stroke-width=".9" opacity=".6"/>
+        <line x1="20" y1="20" x2="35" y2="22" stroke="#fff" stroke-width=".9" opacity=".6"/>
+        <line x1="20" y1="20" x2="20" y2="5"  stroke="#fff" stroke-width=".9" opacity=".6"/>
+        <line x1="20" y1="20" x2="25" y2="34" stroke="#fff" stroke-width=".9" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="bn">Nexa</span>
+      <span class="bs">Estratégia &amp; Eficiência</span>
+    </div>
+  </div>
+  <span class="hdr-right">Benchmark 2025</span>
+</header>
+
+<!-- ── PROGRESS ────────────────────────────────────────────────────────── -->
+<div class="prog-wrap">
+  <span class="prog-lbl">Progresso</span>
+  <div class="prog-track"><div class="prog-bar" id="pBar" style="width:0%"></div></div>
+  <span class="prog-pct" id="pPct">0%</span>
+</div>
+
+<!-- ── HERO ────────────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-bg"><canvas id="nexoCanvas"></canvas></div>
+  <div class="hero-in">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span class="hero-eyebrow-text">Estudo setorial · Nexa Estratégia &amp; Eficiência</span>
+    </div>
+    <h1>
+      Benchmark modelo de<br>
+      <span class="line2">remuneração de <span class="accent">escritórios jurídicos.</span></span>
+    </h1>
+    <div class="hero-body">
+      <p>A remuneração de escritórios externos é uma das decisões mais relevantes da gestão jurídica. Ela influencia <strong>custo, previsibilidade orçamentária, qualidade da prestação dos serviços, alinhamento de incentivos e gestão de risco.</strong></p>
+      <p>Este benchmark foi desenvolvido para apoiar decisões mais informadas sobre contratação, remuneração e gestão de escritórios externos, reunindo uma visão consolidada das práticas adotadas pelas empresas participantes.</p>
+      <p><strong>Ao responder à pesquisa, você receberá o relatório consolidado do estudo</strong> com análises comparativas sobre modelos de remuneração, honorários de êxito, gestão de acordos, avaliação de performance e tendências observadas no mercado.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="val">10</span><span class="lbl">seções</span></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><span class="val">~15'</span><span class="lbl">de duração</span></div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat"><span class="val">100%</span><span class="lbl">confidencial</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTAINER ────────────────────────────────────────────────────────── -->
+<div class="container">
+
+<!-- ════ LGPD ════ -->
+<div class="lgpd" style="animation-delay:.05s">
+  <div class="lgpd-top">
+    <div class="lgpd-icon">
+      <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="2.8" fill="#fff"/>
+        <circle cx="20" cy="20" r="4.8" stroke="#fff" stroke-width="1.1" fill="none"/>
+        <circle cx="7" cy="13" r="2.1" fill="#7FA88A"/>
+        <circle cx="8" cy="29" r="2.1" fill="#7FA88A"/>
+        <circle cx="20" cy="5" r="1.7" fill="#7FA88A"/>
+        <circle cx="33" cy="13" r="2.1" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
+        <circle cx="35" cy="22" r="1.7" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
+        <line x1="20" y1="20" x2="7" y2="13" stroke="#fff" stroke-width=".9" opacity=".7"/>
+        <line x1="20" y1="20" x2="33" y2="13" stroke="#fff" stroke-width=".9" opacity=".7"/>
+        <line x1="20" y1="20" x2="8" y2="29" stroke="#fff" stroke-width=".9" opacity=".7"/>
+        <line x1="20" y1="20" x2="35" y2="22" stroke="#fff" stroke-width=".9" opacity=".7"/>
+        <line x1="20" y1="20" x2="20" y2="5" stroke="#fff" stroke-width=".9" opacity=".7"/>
+      </svg>
+    </div>
+    <div class="lgpd-top-text">
+      <h2>Privacidade e uso dos dados</h2>
+      <p>Lei Geral de Proteção de Dados · Lei nº 13.709/2018</p>
+    </div>
+  </div>
+  <div class="lgpd-body">
+    <p>Esta pesquisa é conduzida pela <strong>Nexa Estratégia &amp; Eficiência</strong> com o objetivo de produzir um benchmark setorial sobre modelos de remuneração de escritórios jurídicos externos.</p>
+    <div class="lgpd-items">
+      <div class="lgpd-item"><span class="lgpd-dot"></span><span>As respostas são estritamente <strong>confidenciais</strong>. Nenhuma empresa participante terá acesso às respostas individuais das demais.</span></div>
+      <div class="lgpd-item"><span class="lgpd-dot"></span><span>Os dados coletados serão utilizados <strong>exclusivamente</strong> para produção do relatório consolidado de benchmark.</span></div>
+      <div class="lgpd-item"><span class="lgpd-dot"></span><span>O relatório final apresentará apenas <strong>resultados agregados e anonimizados</strong>, sem identificação de nenhuma empresa respondente por nome.</span></div>
+      <div class="lgpd-item"><span class="lgpd-dot"></span><span>Os dados não serão compartilhados, vendidos ou utilizados para qualquer outra finalidade.</span></div>
+    </div>
+    <label class="lgpd-agree" id="lgpdLbl">
+      <input type="checkbox" id="lgpdChk" onchange="lgpdTog()">
+      <span class="lgpd-chk"></span>
+      <span class="lgpd-txt">Declaro que li e estou de acordo com os termos acima. <strong>Autorizo o uso das minhas respostas para fins exclusivos desta pesquisa, na forma descrita.</strong></span>
+    </label>
+    <div class="err-msg" id="err-lgpd">É necessário aceitar os termos para participar da pesquisa.</div>
+  </div>
+</div>
+
+<!-- ════ S0: IDENTIFICAÇÃO ════ -->
+<div class="sc" style="animation-delay:.08s">
+  <div class="sc-head">
+    <div class="sc-num">0</div>
+    <div><div class="sc-title">Identificação do respondente</div></div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">E.</span>Nome da empresa<span class="req">*</span></div>
+      <input type="text" id="empresa" placeholder="Ex: Vibra Energia" oninput="prog()">
+      <div class="err-msg" id="err-empresa">Campo obrigatório.</div>
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">T1.</span>Cargo e função no jurídico<span class="req">*</span></div>
+      <input type="text" id="cargo" placeholder="Ex: Head de Contencioso" oninput="prog()">
+      <div class="err-msg" id="err-cargo">Campo obrigatório.</div>
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">T2.</span>Você é responsável pela gestão ou contratação de escritórios externos?<span class="req">*</span></div>
+      <div class="opts" id="t2">
+        <label class="opt"><input type="radio" name="t2" value="sim_total"><span class="dot"></span>Sim, totalmente</label>
+        <label class="opt"><input type="radio" name="t2" value="sim_parcial"><span class="dot"></span>Sim, parcialmente</label>
+        <label class="opt"><input type="radio" name="t2" value="nao"><span class="dot"></span>Não</label>
+      </div>
+      <div class="err-msg" id="err-t2">Selecione uma opção.</div>
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">T3.</span>Existe política ou critério formal de remuneração de escritórios?</div>
+      <div class="opts" id="t3">
+        <label class="opt"><input type="radio" name="t3" value="sim_formal"><span class="dot"></span>Sim, formalizada</label>
+        <label class="opt"><input type="radio" name="t3" value="sim_informal"><span class="dot"></span>Sim, de forma informal</label>
+        <label class="opt"><input type="radio" name="t3" value="nao"><span class="dot"></span>Não</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S1: PERFIL DA EMPRESA ════ -->
+<div class="sc" style="animation-delay:.11s">
+  <div class="sc-head">
+    <div class="sc-num">1</div>
+    <div><div class="sc-title">Perfil da empresa</div></div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">1.</span>Segmento da empresa<span class="req">*</span></div>
+      <input type="text" id="segmento" placeholder="Ex: Distribuição de GLP, Combustíveis, Energia" oninput="prog()">
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">2.</span>Porte (faturamento anual)<span class="req">*</span></div>
+      <div class="opts two" id="porte">
+        <label class="opt"><input type="radio" name="porte" value="ate1bi"><span class="dot"></span>Até R$ 1 bi</label>
+        <label class="opt"><input type="radio" name="porte" value="1a5bi"><span class="dot"></span>R$ 1 bi – R$ 5 bi</label>
+        <label class="opt"><input type="radio" name="porte" value="5a10bi"><span class="dot"></span>R$ 5 bi – R$ 10 bi</label>
+        <label class="opt"><input type="radio" name="porte" value="acima10bi"><span class="dot"></span>Acima de R$ 10 bi</label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">3.</span>Número aproximado de processos ativos (total da carteira terceirizada)</div>
+      <div class="opts two" id="processos">
+        <label class="opt"><input type="radio" name="processos" value="ate1k"><span class="dot"></span>Até 1.000</label>
+        <label class="opt"><input type="radio" name="processos" value="1ka5k"><span class="dot"></span>1.000 – 5.000</label>
+        <label class="opt"><input type="radio" name="processos" value="5ka20k"><span class="dot"></span>5.000 – 20.000</label>
+        <label class="opt"><input type="radio" name="processos" value="20ka100k"><span class="dot"></span>20.000 – 100.000</label>
+        <label class="opt"><input type="radio" name="processos" value="acima100k"><span class="dot"></span>Acima de 100.000</label>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-lbl"><span class="num">4.</span>Número de escritórios externos contratados<span class="req">*</span></div>
+      <div class="opts two" id="nEsc">
+        <label class="opt"><input type="radio" name="nEsc" value="ate3"><span class="dot"></span>Até 3</label>
+        <label class="opt"><input type="radio" name="nEsc" value="4a10"><span class="dot"></span>4 – 10</label>
+        <label class="opt"><input type="radio" name="nEsc" value="11a20"><span class="dot"></span>11 – 20</label>
+        <label class="opt"><input type="radio" name="nEsc" value="21a50"><span class="dot"></span>21 – 50</label>
+        <label class="opt"><input type="radio" name="nEsc" value="acima50"><span class="dot"></span>Acima de 50</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S2: CARTEIRA ════ -->
+<div class="sc" style="animation-delay:.14s">
+  <div class="sc-head">
+    <div class="sc-num">2</div>
+    <div>
+      <div class="sc-title">Estrutura da carteira contenciosa</div>
+      <div class="sc-subtitle">Distribuição por tipo de demanda</div>
+    </div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">5.</span>Qual a distribuição aproximada da carteira contenciosa?<span class="req">*</span></div>
+      <div class="q-hint">A soma deve totalizar 100%. Deixe em branco as categorias que não se aplicam.</div>
+      <div id="pctRows">
+        <div class="pct-row"><span class="pct-label">Contencioso estratégico</span><input type="number" class="pct-input" id="pct-estrategico" min="0" max="100" placeholder="0" oninput="calcPct()"><span class="pct-unit">%</span></div>
+        <div class="pct-row"><span class="pct-label">Contencioso trabalhista de volume</span><input type="number" class="pct-input" id="pct-trabalhista" min="0" max="100" placeholder="0" oninput="calcPct()"><span class="pct-unit">%</span></div>
+        <div class="pct-row"><span class="pct-label">Contencioso consumidor de volume</span><input type="number" class="pct-input" id="pct-consumidor" min="0" max="100" placeholder="0" oninput="calcPct()"><span class="pct-unit">%</span></div>
+        <div class="pct-row"><span class="pct-label">Contencioso tributário</span><input type="number" class="pct-input" id="pct-tributario" min="0" max="100" placeholder="0" oninput="calcPct()"><span class="pct-unit">%</span></div>
+        <div class="pct-row"><span class="pct-label">Outros</span><input type="number" class="pct-input" id="pct-outros" min="0" max="100" placeholder="0" oninput="calcPct()"><span class="pct-unit">%</span></div>
+      </div>
+      <div class="pct-total">
+        <span class="tot-lbl">Total:</span>
+        <span class="tot-val" id="pctTotal">0%</span>
+      </div>
+      <div class="err-msg" id="err-pct">A soma dos percentuais deve totalizar 100%.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S3: OBJETIVOS ════ -->
+<div class="sc" style="animation-delay:.17s">
+  <div class="sc-head">
+    <div class="sc-num">3</div>
+    <div><div class="sc-title">Objetivos da contratação</div></div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">6.</span>Qual o principal objetivo da empresa ao contratar escritórios externos? <span class="limit-badge">Máx. 3 respostas</span></div>
+      <div class="opts two" id="objetivos">
+        <label class="opt"><input type="checkbox" name="obj" value="custo"><span class="box"></span>Redução de custo</label>
+        <label class="opt"><input type="checkbox" name="obj" value="previsibilidade"><span class="box"></span>Previsibilidade orçamentária</label>
+        <label class="opt"><input type="checkbox" name="obj" value="qualidade"><span class="box"></span>Qualidade técnica</label>
+        <label class="opt"><input type="checkbox" name="obj" value="escalabilidade"><span class="box"></span>Escalabilidade operacional</label>
+        <label class="opt"><input type="checkbox" name="obj" value="passivo"><span class="box"></span>Redução de passivo</label>
+        <label class="opt"><input type="checkbox" name="obj" value="especializacao"><span class="box"></span>Especialização</label>
+        <label class="opt"><input type="checkbox" name="obj" value="velocidade"><span class="box"></span>Velocidade de atendimento</label>
+        <label class="opt"><input type="checkbox" name="obj" value="outro_obj"><span class="box"></span>Outro</label>
+      </div>
+      <div class="limit-note" id="lim-obj">Limite de 3 respostas atingido.</div>
+      <div class="cond" id="cond-outro-obj" style="margin-top:.6rem">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outro objetivo?</div>
+        <input type="text" id="outro-obj-txt" placeholder="Descreva o objetivo">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S4: MODELO DE REMUNERAÇÃO ════ -->
+<div class="sc" style="animation-delay:.2s">
+  <div class="sc-head">
+    <div class="sc-num">4</div>
+    <div>
+      <div class="sc-title">Modelo de remuneração</div>
+      <div class="sc-subtitle">Matriz de modelos por tipo de contencioso</div>
+    </div>
+  </div>
+  <div class="sc-body">
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">7.</span>Quais modelos de remuneração são utilizados para cada tipo de contencioso?<span class="req">*</span></div>
+      <div class="q-hint">Marque todos os modelos utilizados em cada tipo de contencioso.</div>
+
+      <!-- examples -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.1rem">
+        <div class="q-example"><strong>Hora trabalhada:</strong> R$ 500/hora de sócio</div>
+        <div class="q-example"><strong>Fixo para gestão de carteira:</strong> R$ 100k/mês para toda carteira trabalhista</div>
+        <div class="q-example"><strong>Fixo para escopo específico:</strong> R$ 30k/mês para um contencioso estratégico</div>
+        <div class="q-example"><strong>Valor por processo:</strong> R$ 40 por processo/mês</div>
+        <div class="q-example"><strong>Valor por nova demanda:</strong> R$ 1.500 por processo distribuído</div>
+        <div class="q-example"><strong>Valor por ato/fase:</strong> R$ 300 por audiência ou R$ 500 por contestação</div>
+        <div class="q-example"><strong>Honorário de êxito:</strong> 10% sobre o valor economizado</div>
+        <div class="q-example"><strong>Vinculado à performance:</strong> bônus por cumprimento de SLA</div>
+      </div>
+
+      <div class="matrix-wrap">
+        <table class="matrix" id="matrizModelos">
+          <thead>
+            <tr>
+              <th>Modelo de remuneração</th>
+              <th>Estratégico</th>
+              <th>Trab. Volume</th>
+              <th>Cons. Volume</th>
+              <th>Tributário</th>
+              <th>Outros</th>
+            </tr>
+          </thead>
+          <tbody id="matrizBody">
+            <!-- JS-generated rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">8.</span>Qual é o modelo predominante em cada tipo de contencioso?</div>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th>Tipo de contencioso</th>
+              <th colspan="5">Modelo predominante</th>
+            </tr>
+          </thead>
+          <tbody id="predBody">
+            <!-- JS-generated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">9.</span>O modelo combina mais de uma forma de remuneração?</div>
+      <div class="opts" id="hibrido">
+        <label class="opt"><input type="radio" name="hibrido" value="sim" onchange="tog('cond-hibrido','sim')"><span class="dot"></span>Sim</label>
+        <label class="opt"><input type="radio" name="hibrido" value="nao" onchange="tog('cond-hibrido','nao')"><span class="dot"></span>Não</label>
+      </div>
+      <div class="cond" id="cond-hibrido">
+        <div class="q-lbl" style="margin-top:.1rem;font-size:.82rem;font-weight:600;color:var(--graf)">Quais combinações são utilizadas? <em style="font-size:.75em;font-weight:400">(múltipla escolha)</em></div>
+        <div class="opts two">
+          <label class="opt"><input type="checkbox" name="comb" value="hora_exito"><span class="box"></span>Hora trabalhada + êxito</label>
+          <label class="opt"><input type="checkbox" name="comb" value="fixo_exito"><span class="box"></span>Valor fixo + êxito</label>
+          <label class="opt"><input type="checkbox" name="comb" value="fixo_perf"><span class="box"></span>Valor fixo + performance</label>
+          <label class="opt"><input type="checkbox" name="comb" value="outra_comb"><span class="box"></span>Outra combinação</label>
+        </div>
+        <div class="cond" id="cond-outra-comb" style="margin-top:.6rem">
+          <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outra combinação?</div>
+          <input type="text" id="outra-comb-txt" placeholder="Descreva a combinação utilizada">
+        </div>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q" id="q-fases-wrap" style="display:none">
+      <div class="q-lbl"><span class="num">10.</span>Quais etapas processuais são remuneradas individualmente?</div>
+      <div class="q-hint">Visível apenas para quem utiliza "Valor por ato/fase processual"</div>
+      <div class="opts two" id="fases">
+        <label class="opt"><input type="checkbox" name="fase" value="entrada"><span class="box"></span>Entrada da ação</label>
+        <label class="opt"><input type="checkbox" name="fase" value="contestacao"><span class="box"></span>Contestação</label>
+        <label class="opt"><input type="checkbox" name="fase" value="audiencia"><span class="box"></span>Audiência</label>
+        <label class="opt"><input type="checkbox" name="fase" value="recurso"><span class="box"></span>Recurso</label>
+        <label class="opt"><input type="checkbox" name="fase" value="sentenca"><span class="box"></span>Sentença</label>
+        <label class="opt"><input type="checkbox" name="fase" value="encerramento"><span class="box"></span>Encerramento do processo</label>
+        <label class="opt"><input type="checkbox" name="fase" value="outro_fase"><span class="box"></span>Outro</label>
+      </div>
+      <div class="cond" id="cond-outro-fase" style="margin-top:.6rem">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outra etapa?</div>
+        <input type="text" id="outro-fase-txt" placeholder="Descreva a etapa remunerada">
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">11.</span>Qual foi o principal motivo para adoção do modelo predominante? <span class="limit-badge">Máx. 3 respostas</span></div>
+      <div class="opts two" id="criterios">
+        <label class="opt"><input type="checkbox" name="crit" value="red_custo"><span class="box"></span>Redução de custo</label>
+        <label class="opt"><input type="checkbox" name="crit" value="prev_orc"><span class="box"></span>Previsibilidade orçamentária</label>
+        <label class="opt"><input type="checkbox" name="crit" value="ctrl_fin"><span class="box"></span>Controle financeiro</label>
+        <label class="opt"><input type="checkbox" name="crit" value="alin_inc"><span class="box"></span>Alinhamento de incentivos</label>
+        <label class="opt"><input type="checkbox" name="crit" value="comp_risco"><span class="box"></span>Compartilhamento de risco</label>
+        <label class="opt"><input type="checkbox" name="crit" value="facilidade"><span class="box"></span>Facilidade de gestão</label>
+        <label class="opt"><input type="checkbox" name="crit" value="volume"><span class="box"></span>Volume de demandas</label>
+        <label class="opt"><input type="checkbox" name="crit" value="complexidade"><span class="box"></span>Complexidade da matéria</label>
+        <label class="opt"><input type="checkbox" name="crit" value="criticidade"><span class="box"></span>Criticidade da matéria</label>
+        <label class="opt"><input type="checkbox" name="crit" value="historico"><span class="box"></span>Histórico da empresa</label>
+        <label class="opt"><input type="checkbox" name="crit" value="outro_crit"><span class="box"></span>Outro</label>
+      </div>
+      <div class="limit-note" id="lim-crit">Limite de 3 respostas atingido.</div>
+      <div class="cond" id="cond-outro-crit" style="margin-top:.6rem">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outro motivo?</div>
+        <input type="text" id="outro-crit-txt" placeholder="Descreva o motivo">
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">12.</span>Considerando os objetivos da empresa, qual o nível de satisfação com o modelo predominante?</div>
+      <div class="q-hint">1 = muito insatisfeito · 5 = muito satisfeito</div>
+      <div class="scale-row" id="sc12">
+        <button class="scale-btn" onclick="scl('sc12',this,1)">1</button>
+        <button class="scale-btn" onclick="scl('sc12',this,2)">2</button>
+        <button class="scale-btn" onclick="scl('sc12',this,3)">3</button>
+        <button class="scale-btn" onclick="scl('sc12',this,4)">4</button>
+        <button class="scale-btn" onclick="scl('sc12',this,5)">5</button>
+      </div>
+      <div class="scale-labels"><span>Muito insatisfeito</span><span>Muito satisfeito</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ S5: HONORÁRIO DE ÊXITO ════ -->
+<div class="sc" style="animation-delay:.23s">
+  <div class="sc-head">
+    <div class="sc-num">5</div>
+    <div>
+      <div class="sc-title">Honorário de êxito</div>
+      <div class="sc-subtitle">Remuneração condicionada ao resultado jurídico ou financeiro obtido</div>
+    </div>
+  </div>
+  <div class="sc-body">
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">13.</span>Em quais tipos de contencioso existe previsão de honorário de êxito?</div>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead><tr>
+            <th>Tipo de contencioso</th>
+            <th>Sim</th>
+            <th>Não</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Estratégico</td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-est')"></div><input type="hidden" id="exito-est" value=""></td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-est-n')"></div><input type="hidden" id="exito-est-n" value=""></td></tr>
+            <tr><td>Trabalhista de volume</td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-trab')"></div><input type="hidden" id="exito-trab" value=""></td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-trab-n')"></div><input type="hidden" id="exito-trab-n" value=""></td></tr>
+            <tr><td>Consumidor de volume</td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-cons')"></div><input type="hidden" id="exito-cons" value=""></td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-cons-n')"></div><input type="hidden" id="exito-cons-n" value=""></td></tr>
+            <tr><td>Tributário</td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-trib')"></div><input type="hidden" id="exito-trib" value=""></td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-trib-n')"></div><input type="hidden" id="exito-trib-n" value=""></td></tr>
+            <tr><td>Outros</td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-outr')"></div><input type="hidden" id="exito-outr" value=""></td><td class="center"><div class="m-radio" onclick="mRadio(this,'exito-outr-n')"></div><input type="hidden" id="exito-outr-n" value=""></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">14.</span>Em aproximadamente qual percentual da carteira terceirizada existe previsão de honorário de êxito?</div>
+      <div class="opts" id="exitoPct">
+        <label class="opt"><input type="radio" name="exitoPct" value="nao"><span class="dot"></span>Não utilizamos honorário de êxito</label>
+        <label class="opt"><input type="radio" name="exitoPct" value="ate25"><span class="dot"></span>Até 25% da carteira</label>
+        <label class="opt"><input type="radio" name="exitoPct" value="26a50"><span class="dot"></span>Entre 26% e 50% da carteira</label>
+        <label class="opt"><input type="radio" name="exitoPct" value="51a75"><span class="dot"></span>Entre 51% e 75% da carteira</label>
+        <label class="opt"><input type="radio" name="exitoPct" value="acima75"><span class="dot"></span>Acima de 75% da carteira</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">15.</span>Quando existe honorário de êxito, qual o percentual normalmente praticado?</div>
+      <div class="opts two" id="exitoPerc">
+        <label class="opt"><input type="radio" name="exitoPerc" value="ate5"><span class="dot"></span>Até 5%</label>
+        <label class="opt"><input type="radio" name="exitoPerc" value="6a10"><span class="dot"></span>6% a 10%</label>
+        <label class="opt"><input type="radio" name="exitoPerc" value="11a20"><span class="dot"></span>11% a 20%</label>
+        <label class="opt"><input type="radio" name="exitoPerc" value="21a30"><span class="dot"></span>21% a 30%</label>
+        <label class="opt"><input type="radio" name="exitoPerc" value="acima30"><span class="dot"></span>Acima de 30%</label>
+        <label class="opt"><input type="radio" name="exitoPerc" value="varia"><span class="dot"></span>Varia significativamente conforme a demanda</label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ S6: PERFORMANCE ════ -->
+<div class="sc" style="animation-delay:.26s">
+  <div class="sc-head">
+    <div class="sc-num">6</div>
+    <div>
+      <div class="sc-title">Performance</div>
+      <div class="sc-subtitle">Avaliação da qualidade da prestação do serviço: SLA, prazo, produtividade, qualidade técnica</div>
+    </div>
+  </div>
+  <div class="sc-body">
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">16.</span>A performance do escritório influencia a remuneração?<span class="req">*</span></div>
+      <div class="opts" id="perfInfluencia">
+        <label class="opt"><input type="radio" name="perfInfluencia" value="sim"><span class="dot"></span>Sim</label>
+        <label class="opt"><input type="radio" name="perfInfluencia" value="nao"><span class="dot"></span>Não</label>
+      </div>
+      <div class="err-msg" id="err-perfInfluencia">Selecione uma opção.</div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">17.</span>Quais indicadores são utilizados para avaliação de performance? <em style="font-size:.8em;font-weight:400;color:var(--sm)">(múltipla escolha)</em></div>
+      <div class="opts two" id="kpis">
+        <label class="opt"><input type="checkbox" name="kpi" value="qualidade_tec"><span class="box"></span>Qualidade técnica</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="taxa_exito"><span class="box"></span>Taxa de êxito</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="sla"><span class="box"></span>SLA</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="prazo_resp"><span class="box"></span>Prazo de resposta</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="produtividade"><span class="box"></span>Produtividade</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="orcamento"><span class="box"></span>Cumprimento de orçamento</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="economia"><span class="box"></span>Economia gerada</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="red_contingencias"><span class="box"></span>Redução de contingências</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="satisfacao_int"><span class="box"></span>Satisfação do cliente interno</label>
+        <label class="opt"><input type="checkbox" name="kpi" value="outro_kpi"><span class="box"></span>Outro</label>
+      </div>
+      <div class="cond" id="cond-outro-kpi" style="margin-top:.6rem">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outro indicador?</div>
+        <input type="text" id="outro-kpi-txt" placeholder="Descreva o indicador utilizado">
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">18.</span>Existe remuneração variável associada à performance?<span class="req">*</span></div>
+      <div class="opts two" id="remunVar">
+        <label class="opt"><input type="radio" name="remunVar" value="bonus"><span class="dot"></span>Bônus</label>
+        <label class="opt"><input type="radio" name="remunVar" value="penalidade"><span class="dot"></span>Penalidade</label>
+        <label class="opt"><input type="radio" name="remunVar" value="ambos"><span class="dot"></span>Ambos</label>
+        <label class="opt"><input type="radio" name="remunVar" value="nao"><span class="dot"></span>Não existe</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">19.</span>Frequência de avaliação de performance</div>
+      <div class="opts two" id="freqAval">
+        <label class="opt"><input type="radio" name="freqAval" value="mensal"><span class="dot"></span>Mensal</label>
+        <label class="opt"><input type="radio" name="freqAval" value="trimestral"><span class="dot"></span>Trimestral</label>
+        <label class="opt"><input type="radio" name="freqAval" value="semestral"><span class="dot"></span>Semestral</label>
+        <label class="opt"><input type="radio" name="freqAval" value="anual"><span class="dot"></span>Anual</label>
+        <label class="opt"><input type="radio" name="freqAval" value="nao"><span class="dot"></span>Não há avaliação formal</label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ S7: ACORDOS ════ -->
+<div class="sc" style="animation-delay:.29s">
+  <div class="sc-head">
+    <div class="sc-num">7</div>
+    <div><div class="sc-title">Gestão de acordos</div></div>
+  </div>
+  <div class="sc-body">
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">20.</span>Nos casos de acordo, existe remuneração específica para negociação e fechamento?</div>
+      <div class="opts" id="acordoRemun">
+        <label class="opt"><input type="radio" name="acordoRemun" value="nao"><span class="dot"></span>Não</label>
+        <label class="opt"><input type="radio" name="acordoRemun" value="fixo"><span class="dot"></span>Sim, valor fixo por acordo</label>
+        <label class="opt"><input type="radio" name="acordoRemun" value="var_saving"><span class="dot"></span>Sim, remuneração variável baseada no saving</label>
+        <label class="opt"><input type="radio" name="acordoRemun" value="fixo_var"><span class="dot"></span>Sim, combinação de valor fixo e variável baseada no saving</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">21.</span>Quando existe remuneração variável por acordo, qual o percentual normalmente praticado sobre o saving?</div>
+      <div class="opts two" id="acordoPerc">
+        <label class="opt"><input type="radio" name="acordoPerc" value="ate5"><span class="dot"></span>Até 5%</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="6a10"><span class="dot"></span>6% a 10%</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="11a20"><span class="dot"></span>11% a 20%</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="21a30"><span class="dot"></span>21% a 30%</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="acima30"><span class="dot"></span>Acima de 30%</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="varia"><span class="dot"></span>Varia conforme a demanda</label>
+        <label class="opt"><input type="radio" name="acordoPerc" value="na"><span class="dot"></span>Não se aplica</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">22.</span>Quem normalmente conduz a negociação dos acordos?</div>
+      <div class="opts" id="acordoCond">
+        <label class="opt"><input type="radio" name="acordoCond" value="mesmo"><span class="dot"></span>O mesmo escritório responsável pela ação</label>
+        <label class="opt"><input type="radio" name="acordoCond" value="outro_esc"><span class="dot"></span>Outro escritório especializado em negociação</label>
+        <label class="opt"><input type="radio" name="acordoCond" value="empresa_esp"><span class="dot"></span>Empresa especializada em negociação de acordos</label>
+        <label class="opt"><input type="radio" name="acordoCond" value="hibrido_ac"><span class="dot"></span>Modelo híbrido</label>
+        <label class="opt"><input type="radio" name="acordoCond" value="outro_ac"><span class="dot"></span>Outro</label>
+      </div>
+      <div class="cond" id="cond-outro-ac">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outro modelo de condução?</div>
+        <input type="text" id="outro-ac-txt" placeholder="Descreva quem conduz a negociação">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ S8: GOVERNANÇA FINANCEIRA ════ -->
+<div class="sc" style="animation-delay:.32s">
+  <div class="sc-head">
+    <div class="sc-num">8</div>
+    <div><div class="sc-title">Governança financeira</div></div>
+  </div>
+  <div class="sc-body">
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">23.</span>Existe CAP (limite máximo de honorários)?</div>
+      <div class="opts" id="cap">
+        <label class="opt"><input type="radio" name="cap" value="sim" onchange="tog('cond-cap','sim')"><span class="dot"></span>Sim</label>
+        <label class="opt"><input type="radio" name="cap" value="nao" onchange="tog('cond-cap','nao')"><span class="dot"></span>Não</label>
+      </div>
+      <div class="cond" id="cond-cap">
+        <div class="q-lbl" style="font-size:.82rem">O CAP é aplicado em qual nível?</div>
+        <div class="opts two">
+          <label class="opt"><input type="checkbox" name="capNivel" value="processo"><span class="box"></span>Por processo</label>
+          <label class="opt"><input type="checkbox" name="capNivel" value="carteira"><span class="box"></span>Por carteira</label>
+          <label class="opt"><input type="checkbox" name="capNivel" value="periodo"><span class="box"></span>Por período</label>
+          <label class="opt"><input type="checkbox" name="capNivel" value="escritorio"><span class="box"></span>Por escritório</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">24.</span>Índice de reajuste contratual</div>
+      <div class="opts two" id="indiceReaj">
+        <label class="opt"><input type="radio" name="indiceReaj" value="ipca"><span class="dot"></span>IPCA</label>
+        <label class="opt"><input type="radio" name="indiceReaj" value="igpm"><span class="dot"></span>IGP-M</label>
+        <label class="opt"><input type="radio" name="indiceReaj" value="inpc"><span class="dot"></span>INPC</label>
+        <label class="opt"><input type="radio" name="indiceReaj" value="outro"><span class="dot"></span>Outro</label>
+        <label class="opt"><input type="radio" name="indiceReaj" value="nao"><span class="dot"></span>Sem reajuste automático</label>
+      </div>
+      <div class="cond" id="cond-outro-reaj">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual índice é utilizado?</div>
+        <input type="text" id="outro-reaj-txt" placeholder="Ex: INCC, IGP-DI, negociação livre">
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">25.</span>Existe sistema automatizado para análise/validação de faturas?</div>
+      <div class="opts" id="autoNF">
+        <label class="opt"><input type="radio" name="autoNF" value="sim"><span class="dot"></span>Sim</label>
+        <label class="opt"><input type="radio" name="autoNF" value="em_impl"><span class="dot"></span>Em implantação</label>
+        <label class="opt"><input type="radio" name="autoNF" value="nao"><span class="dot"></span>Não</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">26.</span>Orçamento anual aproximado com escritórios externos</div>
+      <div class="opts two" id="orcamento">
+        <label class="opt"><input type="radio" name="orcamento" value="ate5M"><span class="dot"></span>Até R$ 5 M</label>
+        <label class="opt"><input type="radio" name="orcamento" value="5a20M"><span class="dot"></span>R$ 5 M – R$ 20 M</label>
+        <label class="opt"><input type="radio" name="orcamento" value="20a50M"><span class="dot"></span>R$ 20 M – R$ 50 M</label>
+        <label class="opt"><input type="radio" name="orcamento" value="50a100M"><span class="dot"></span>R$ 50 M – R$ 100 M</label>
+        <label class="opt"><input type="radio" name="orcamento" value="acima100M"><span class="dot"></span>Acima de R$ 100 M</label>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ S9: LIMITAÇÕES ════ -->
+<div class="sc" style="animation-delay:.35s">
+  <div class="sc-head">
+    <div class="sc-num">9</div>
+    <div><div class="sc-title">Limitações do modelo atual</div></div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">27.</span>Quais são as principais limitações do modelo atual? <span class="limit-badge">Máx. 3 respostas</span></div>
+      <div class="opts two" id="limitacoes">
+        <label class="opt"><input type="checkbox" name="lim" value="baixa_prev"><span class="box"></span>Baixa previsibilidade financeira</label>
+        <label class="opt"><input type="checkbox" name="lim" value="complexidade"><span class="box"></span>Complexidade de gestão</label>
+        <label class="opt"><input type="checkbox" name="lim" value="auditoria"><span class="box"></span>Dificuldade de auditoria</label>
+        <label class="opt"><input type="checkbox" name="lim" value="inc_desalin"><span class="box"></span>Incentivos desalinhados</label>
+        <label class="opt"><input type="checkbox" name="lim" value="exc_horas"><span class="box"></span>Incentiva excesso de horas</label>
+        <label class="opt"><input type="checkbox" name="lim" value="aum_volume"><span class="box"></span>Incentiva aumento de volume</label>
+        <label class="opt"><input type="checkbox" name="lim" value="sem_efic"><span class="box"></span>Falta de incentivo à eficiência</label>
+        <label class="opt"><input type="checkbox" name="lim" value="qual_inc"><span class="box"></span>Qualidade inconsistente</label>
+        <label class="opt"><input type="checkbox" name="lim" value="outro_lim"><span class="box"></span>Outro</label>
+      </div>
+      <div class="limit-note" id="lim-lim">Limite de 3 respostas atingido.</div>
+      <div class="cond" id="cond-outro-lim" style="margin-top:.6rem">
+        <div class="q-lbl" style="font-size:.82rem;font-weight:500">Qual outra limitação?</div>
+        <input type="text" id="outro-lim-txt" placeholder="Descreva a limitação percebida">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S10: TENDÊNCIAS ════ -->
+<div class="sc" style="animation-delay:.38s">
+  <div class="sc-head">
+    <div class="sc-num">10</div>
+    <div><div class="sc-title">Tendências e perspectivas</div></div>
+  </div>
+  <div class="sc-body">
+    <div class="q">
+      <div class="q-lbl"><span class="num">28.</span>Houve mudança de modelo nos últimos 2 anos?</div>
+      <div class="opts" id="mudanca">
+        <label class="opt"><input type="radio" name="mudanca" value="sim" onchange="tog('cond-mud','sim')"><span class="dot"></span>Sim</label>
+        <label class="opt"><input type="radio" name="mudanca" value="nao" onchange="tog('cond-mud','nao')"><span class="dot"></span>Não</label>
+      </div>
+      <div class="cond" id="cond-mud">
+        <div class="q-lbl" style="font-size:.82rem">Qual foi a principal mudança e o que a motivou?</div>
+        <textarea id="mudancaDesc" placeholder="Descreva o que mudou e o que motivou..."></textarea>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">29.</span>Qual modelo tende a crescer nos próximos anos na sua visão?</div>
+      <div class="opts" id="modeloFut">
+        <label class="opt"><input type="radio" name="modeloFut" value="hibrido"><span class="dot"></span>Modelo híbrido (fixo + êxito + performance)</label>
+        <label class="opt"><input type="radio" name="modeloFut" value="performance"><span class="dot"></span>Remuneração por performance</label>
+        <label class="opt"><input type="radio" name="modeloFut" value="fee_fase"><span class="dot"></span>Valor por ato/fase processual</label>
+        <label class="opt"><input type="radio" name="modeloFut" value="fee_processo"><span class="dot"></span>Valor por processo</label>
+        <label class="opt"><input type="radio" name="modeloFut" value="fee_fixo"><span class="dot"></span>Valor fixo mensal</label>
+      </div>
+    </div>
+
+    <div class="q-divider"></div>
+
+    <div class="q">
+      <div class="q-lbl"><span class="num">30.</span>Quais são as principais boas práticas na gestão de escritórios externos que você recomendaria?</div>
+      <textarea id="boasPraticas" placeholder="Descreva práticas que funcionam e que você recomendaria para outras empresas do setor..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SUBMIT ════ -->
+<div class="submit-area" id="submitArea">
+  <p>Quanto maior a qualidade e o detalhamento das respostas, mais rico será o benchmark que todos os participantes receberão ao final.</p>
+  <button class="btn-submit" id="btnEnviar" onclick="enviar()" disabled>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    Enviar respostas
+  </button>
+</div>
+
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4A7459" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h2>Resposta registrada</h2>
+  <p>Obrigado pela participação. Suas respostas foram salvas com sucesso e serão consolidadas no relatório de benchmark setorial.</p>
+  <p>O relatório final com os resultados agregados e anonimizados será compartilhado com todas as empresas participantes após o encerramento da coleta.</p>
+  <p class="email-note" id="emailFallback" style="display:none">Caso seu cliente de e-mail não tenha aberto automaticamente, <a id="emailLink" href="#">clique aqui</a> para enviar a cópia das respostas.</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// NEXO CANVAS ANIMATION
+// ═══════════════════════════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('nexoCanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W,H,pts=[];
+  function resize(){
+    W=cv.parentElement.clientWidth; H=cv.parentElement.clientHeight;
+    cv.width=W; cv.height=H;
+    initPts();
+  }
+  function initPts(){
+    pts=[];
+    const n=Math.floor((W*H)/14000);
+    for(let i=0;i<n;i++){
+      pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:Math.random()*1.5+.8});
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='#fff';
+      ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<100){
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x,pts[i].y);
+          ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(255,255,255,${(1-d/100)*.35})`;
+          ctx.lineWidth=.7;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  draw();
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+// MATRIX MODELS SETUP
+// ═══════════════════════════════════════════════════════════════════
+const MODELOS = [
+  {id:'hora', lbl:'Hora trabalhada'},
+  {id:'fixo_carteira', lbl:'Valor fixo para gestão de carteira'},
+  {id:'fixo_escopo', lbl:'Valor fixo para escopo específico'},
+  {id:'por_processo', lbl:'Valor por processo'},
+  {id:'nova_demanda', lbl:'Valor por nova demanda'},
+  {id:'ato_fase', lbl:'Valor por ato/fase processual'},
+  {id:'exito', lbl:'Honorário de êxito'},
+  {id:'performance', lbl:'Remuneração vinculada à performance'},
+];
+const TIPOS = ['est','trab','cons','trib','outr'];
+const TIPO_LBLS = ['Estratégico','Trab. Volume','Cons. Volume','Tributário','Outros'];
+
+// Build checkbox matrix
+const mb = document.getElementById('matrizBody');
+MODELOS.forEach(m => {
+  const tr = document.createElement('tr');
+  let td = `<td>${m.lbl}</td>`;
+  TIPOS.forEach(t => {
+    td += `<td class="center"><div class="m-check" id="mc-${m.id}-${t}" onclick="mCheck(this,'${m.id}','${t}')"></div></td>`;
+  });
+  tr.innerHTML = td;
+  mb.appendChild(tr);
+});
+
+// Build dropdown pred matrix
+const pb = document.getElementById('predBody');
+const predOpts = `<option value="">Selecione</option>${MODELOS.map(m=>`<option value="${m.id}">${m.lbl}</option>`).join('')}`;
+TIPOS.forEach((t,i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${TIPO_LBLS[i]}</td><td colspan="5"><select class="m-select" id="pred-${t}" onchange="checkFases()">${predOpts}</select></td>`;
+  pb.appendChild(tr);
+});
+
+// Check/radio matrix helpers
+function mCheck(el,m,t){
+  el.classList.toggle('sel');
+  checkFases();
+  prog();
+}
+function mRadio(el, group) {
+  // group for row
+  const row = el.closest('tr');
+  row.querySelectorAll('.m-radio').forEach(r => r.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// Show fases if ato_fase selected
+function checkFases(){
+  let show = false;
+  TIPOS.forEach(t => {
+    const mc = document.getElementById(`mc-ato_fase-${t}`);
+    const pr = document.getElementById(`pred-${t}`);
+    if((mc&&mc.classList.contains('sel')) || (pr&&pr.value==='ato_fase')) show=true;
+  });
+  document.getElementById('q-fases-wrap').style.display = show ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// OUTRO CONDITIONAL FIELDS
+// ═══════════════════════════════════════════════════════════════════
+// Checkbox-driven "outro" reveals
+function setupOutroChk(name, condId) {
+  document.querySelectorAll(`[name="${name}"]`).forEach(chk => {
+    chk.addEventListener('change', function(){
+      const outroChk = document.querySelector(`[name="${name}"][value^="outro"]`);
+      const cond = document.getElementById(condId);
+      if(cond) cond.classList.toggle('on', outroChk && outroChk.checked);
+    });
+  });
+}
+setupOutroChk('obj',  'cond-outro-obj');
+setupOutroChk('comb', 'cond-outra-comb');
+setupOutroChk('fase', 'cond-outro-fase');
+setupOutroChk('crit', 'cond-outro-crit');
+setupOutroChk('kpi',  'cond-outro-kpi');
+setupOutroChk('lim',  'cond-outro-lim');
+
+// Radio-driven "outro" reveals
+function setupOutroRad(name, condId, triggerVal) {
+  document.querySelectorAll(`[name="${name}"]`).forEach(r => {
+    r.addEventListener('change', function(){
+      const cond = document.getElementById(condId);
+      if(cond) cond.classList.toggle('on', this.value === triggerVal);
+    });
+  });
+}
+setupOutroRad('acordoCond', 'cond-outro-ac',   'outro_ac');
+setupOutroRad('indiceReaj', 'cond-outro-reaj', 'outro');
+document.querySelectorAll('.opt').forEach(o => {
+  const inp = o.querySelector('input');
+  if(!inp) return;
+  inp.addEventListener('change', function(){
+    if(this.type==='radio'){
+      document.querySelectorAll(`[name="${this.name}"]`).forEach(r=>r.closest('.opt')?.classList.remove('sel'));
+    }
+    this.checked ? o.classList.add('sel') : o.classList.remove('sel');
+    prog();
+  });
+});
+
+// Limit checkboxes
+function setupLimit(name, max, limitId) {
+  document.querySelectorAll(`[name="${name}"]`).forEach(chk => {
+    chk.addEventListener('change', function(){
+      const checked = document.querySelectorAll(`[name="${name}"]:checked`);
+      if(checked.length > max){
+        this.checked = false;
+        this.closest('.opt')?.classList.remove('sel');
+      }
+      const note = document.getElementById(limitId);
+      if(note) note.classList.toggle('on', document.querySelectorAll(`[name="${name}"]:checked`).length >= max);
+      prog();
+    });
+  });
+}
+setupLimit('obj', 3, 'lim-obj');
+setupLimit('crit', 3, 'lim-crit');
+setupLimit('lim', 3, 'lim-lim');
+
+// ═══════════════════════════════════════════════════════════════════
+// SCALE
+// ═══════════════════════════════════════════════════════════════════
+function scl(id,btn,v){
+  document.querySelectorAll(`#${id} .scale-btn`).forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById(id).dataset.v=v;
+  prog();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CONDITIONAL
+// ═══════════════════════════════════════════════════════════════════
+function tog(id,v){ document.getElementById(id)?.classList.toggle('on', v==='sim'); }
+
+// ═══════════════════════════════════════════════════════════════════
+// PCT TOTAL
+// ═══════════════════════════════════════════════════════════════════
+function calcPct(){
+  const ids=['estrategico','trabalhista','consumidor','tributario','outros'];
+  const total = ids.reduce((s,id)=>{ const v=parseInt(document.getElementById('pct-'+id)?.value)||0; return s+v; },0);
+  const el = document.getElementById('pctTotal');
+  el.textContent = total+'%';
+  el.className = 'tot-val'+(total===100?' ok':total>100?' over':'');
+  prog();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LGPD
+// ═══════════════════════════════════════════════════════════════════
+function lgpdTog(){
+  const ok = document.getElementById('lgpdChk').checked;
+  document.getElementById('lgpdLbl').classList.toggle('sel',ok);
+  document.getElementById('btnEnviar').disabled = !ok;
+  document.getElementById('err-lgpd').classList.remove('on');
+  prog();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════════════════════════════════
+function radio(n){ const e=document.querySelector(`[name="${n}"]:checked`); return e?e.value:null; }
+function checks(n){ return[...document.querySelectorAll(`[name="${n}"]:checked`)].map(e=>e.value); }
+
+function prog(){
+  let f=0, t=0;
+  // lgpd
+  t++; if(document.getElementById('lgpdChk').checked) f++;
+  // text
+  ['empresa','cargo','segmento'].forEach(id=>{ t++; if(document.getElementById(id)?.value.trim()) f++; });
+  // radios
+  ['t2','t3','porte','nEsc','hibrido','perfInfluencia','remunVar','freqAval','cap','acordoRemun','indiceReaj','autoNF','mudanca','modeloFut'].forEach(n=>{ t++; if(radio(n)) f++; });
+  // pct
+  t++; if(document.getElementById('pctTotal')?.textContent==='100%') f++;
+  const pct = Math.round(f/t*100);
+  document.getElementById('pBar').style.width=pct+'%';
+  document.getElementById('pPct').textContent=pct+'%';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// COLLECT + SUBMIT
+// ═══════════════════════════════════════════════════════════════════
+function validate(){
+  let ok=true;
+  if(!document.getElementById('lgpdChk').checked){ document.getElementById('err-lgpd').classList.add('on'); ok=false; }
+  [['empresa','text'],['cargo','text'],['t2','radio'],['perfInfluencia','radio']].forEach(([f,tp])=>{
+    const v=tp==='text'?document.getElementById(f)?.value.trim():radio(f);
+    const e=document.getElementById('err-'+f);
+    if(!v){if(e)e.classList.add('on');ok=false;}else{if(e)e.classList.remove('on');}
+  });
+  return ok;
+}
+
+function collectMatrix(){
+  const res={};
+  TIPOS.forEach(t=>{
+    res[t]=MODELOS.filter(m=>document.getElementById(`mc-${m.id}-${t}`)?.classList.contains('sel')).map(m=>m.id);
+  });
+  return res;
+}
+function collectPred(){
+  const res={};
+  TIPOS.forEach(t=>{ const s=document.getElementById(`pred-${t}`); if(s)res[t]=s.value||''; });
+  return res;
+}
+function collectExitoRows(){
+  const res={};
+  ['est','trab','cons','trib','outr'].forEach(t=>{
+    const simEl=document.querySelector(`#exito-${t}`);
+    // find radio in same row
+    const rows=document.querySelectorAll('.matrix tbody tr');
+    rows.forEach(tr=>{
+      const radios=tr.querySelectorAll('.m-radio');
+      if(radios.length===2){
+        const lbl=tr.querySelector('td:first-child')?.textContent||'';
+        const key=lbl.toLowerCase().includes('estrat')?'est':lbl.toLowerCase().includes('trab')?'trab':lbl.toLowerCase().includes('cons')?'cons':lbl.toLowerCase().includes('trib')?'trib':'outr';
+        res[key]=radios[0].classList.contains('sel')?'sim':radios[1].classList.contains('sel')?'nao':'';
+      }
+    });
+  });
+  return res;
+}
+
+function enviar(){
+  if(!validate()){
+    document.querySelector('.err-msg.on')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const d={
+    id:Date.now(), ts:new Date().toISOString(), lgpdConsent:true,
+    empresa:document.getElementById('empresa').value.trim(),
+    cargo:document.getElementById('cargo').value.trim(),
+    t2:radio('t2'), t3:radio('t3'),
+    segmento:document.getElementById('segmento').value.trim(),
+    porte:radio('porte'), processos:radio('processos'), nEsc:radio('nEsc'),
+    carteira:{
+      estrategico:parseInt(document.getElementById('pct-estrategico')?.value)||0,
+      trabalhista:parseInt(document.getElementById('pct-trabalhista')?.value)||0,
+      consumidor:parseInt(document.getElementById('pct-consumidor')?.value)||0,
+      tributario:parseInt(document.getElementById('pct-tributario')?.value)||0,
+      outros:parseInt(document.getElementById('pct-outros')?.value)||0,
+    },
+    objetivos:checks('obj'),
+    matrizModelos:collectMatrix(),
+    modeloPred:collectPred(),
+    hibrido:radio('hibrido'), combinacoes:checks('comb'),
+    fases:checks('fase'),
+    criterios:checks('crit'),
+    satisfacao:document.getElementById('sc12')?.dataset.v||null,
+    exitoPorTipo:collectExitoRows(),
+    exitoPct:radio('exitoPct'), exitoPeso:radio('exitoPeso'),
+    exitoPerc:radio('exitoPerc'),
+    perfInfluencia:radio('perfInfluencia'),
+    kpis:checks('kpi'),
+    remunVar:radio('remunVar'), freqAval:radio('freqAval'),
+    acordoRemun:radio('acordoRemun'), acordoPerc:radio('acordoPerc'), acordoCond:radio('acordoCond'),
+    cap:radio('cap'), capNivel:checks('capNivel'),
+    indiceReaj:radio('indiceReaj'), autoNF:radio('autoNF'), orcamento:radio('orcamento'),
+    limitacoes:checks('lim'),
+    limitacoesOutro:document.getElementById('outro-lim-txt')?.value||'',
+    objetivosOutro:document.getElementById('outro-obj-txt')?.value||'',
+    criteriosOutro:document.getElementById('outro-crit-txt')?.value||'',
+    kpisOutro:document.getElementById('outro-kpi-txt')?.value||'',
+    fasesOutro:document.getElementById('outro-fase-txt')?.value||'',
+    combinacoesOutro:document.getElementById('outra-comb-txt')?.value||'',
+    acordoCondOutro:document.getElementById('outro-ac-txt')?.value||'',
+    indiceReajOutro:document.getElementById('outro-reaj-txt')?.value||'',
+    mudanca:radio('mudanca'), mudancaDesc:document.getElementById('mudancaDesc')?.value||'',
+    modeloFut:radio('modeloFut'),
+    boasPraticas:document.getElementById('boasPraticas')?.value||'',
+  };
+
+  // Flatten carteira for Google Sheets columns
+  const flat = {
+    ...d,
+    cart_estrategico: d.carteira?.estrategico||0,
+    cart_trabalhista:  d.carteira?.trabalhista||0,
+    cart_consumidor:   d.carteira?.consumidor||0,
+    cart_tributario:   d.carteira?.tributario||0,
+    cart_outros:       d.carteira?.outros||0,
+    // flatten matriz modelos
+    modelos_est:  (d.matrizModelos?.est||[]).join(', '),
+    modelos_trab: (d.matrizModelos?.trab||[]).join(', '),
+    modelos_cons: (d.matrizModelos?.cons||[]).join(', '),
+    modelos_trib: (d.matrizModelos?.trib||[]).join(', '),
+    modelos_outr: (d.matrizModelos?.outr||[]).join(', '),
+    // flatten modelo pred
+    pred_est:  d.modeloPred?.est||'',
+    pred_trab: d.modeloPred?.trab||'',
+    pred_cons: d.modeloPred?.cons||'',
+    pred_trib: d.modeloPred?.trib||'',
+    pred_outr: d.modeloPred?.outr||'',
+    // flatten exito por tipo
+    exito_est:  d.exitoPorTipo?.est||'',
+    exito_trab: d.exitoPorTipo?.trab||'',
+    exito_cons: d.exitoPorTipo?.cons||'',
+    exito_trib: d.exitoPorTipo?.trib||'',
+    exito_outr: d.exitoPorTipo?.outr||'',
+    // arrays to string
+    objetivos:    (d.objetivos||[]).join(', '),
+    combinacoes:  (d.combinacoes||[]).join(', '),
+    fases:        (d.fases||[]).join(', '),
+    criterios:    (d.criterios||[]).join(', '),
+    kpis:         (d.kpis||[]).join(', '),
+    limitacoes:   (d.limitacoes||[]).join(', '),
+    capNivel:     (d.capNivel||[]).join(', '),
+  };
+
+  // Save locally as backup
+  const saved=JSON.parse(localStorage.getItem('bench_nexa_v2')||'[]');
+  saved.push(d);
+  localStorage.setItem('bench_nexa_v2',JSON.stringify(saved));
+
+  // Send to Google Sheets automatically
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAGievduiPxsCP3V4NnZ3DkLqtNY6gyhFL_IiL3zw7s8epixuUiWkvtAxtZX86TYyT/exec';
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(flat)
+  }).catch(()=>{}); // silently ignore errors — data is still saved locally
+
+  // Email notification
+  const emp=d.empresa||'(não informado)';
+  const dt=new Date(d.ts).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+  const bdy=[
+    `Benchmark Nexa: Nova resposta`,``,`Empresa: ${emp}`,`Cargo: ${d.cargo}`,`Data: ${dt}`,``,
+    `CARTEIRA:`,
+    `Estratégico: ${d.carteira.estrategico}%`,`Trabalhista volume: ${d.carteira.trabalhista}%`,
+    `Consumidor volume: ${d.carteira.consumidor}%`,`Tributário: ${d.carteira.tributario}%`,`Outros: ${d.carteira.outros}%`,``,
+    `PERFORMANCE → REMUNERAÇÃO: ${d.perfInfluencia==='sim'?'Sim':'Não'}`,
+    `Remun. variável: ${d.remunVar||'(não respondido)'}`,
+    `Freq. avaliação: ${d.freqAval||'(não respondido)'}`,``,
+    `HONORÁRIO DE ÊXITO:`,`% carteira com êxito: ${d.exitoPct||'(não respondido)'}`,
+    `% praticado: ${d.exitoPerc||'(não respondido)'}`,``,
+    `ACORDOS: ${d.acordoRemun||'(não respondido)'}`,`Condutor: ${d.acordoCond||'(não respondido)'}`,``,
+    d.boasPraticas?`BOAS PRÁTICAS: ${d.boasPraticas}`:'',``,
+    `---`,`Gerado automaticamente pelo formulário de benchmark Nexa.`
+  ].filter(l=>l!==undefined).join('\n');
+
+  const mailto=`mailto:debora@nexaeg.com.br?subject=${encodeURIComponent('[Benchmark Nexa] Nova resposta: '+emp)}&body=${encodeURIComponent(bdy)}`;
+  const fr=document.createElement('iframe'); fr.style.display='none'; fr.src=mailto;
+  document.body.appendChild(fr);
+  setTimeout(()=>{
+    const el=document.getElementById('emailLink');
+    const fp=document.getElementById('emailFallback');
+    if(el&&fp){el.href=mailto;fp.style.display='block';}
+    fr.remove();
+  },2000);
+
+  // Show success
+  document.getElementById('submitArea').style.display='none';
+  document.querySelectorAll('.sc').forEach(c=>c.style.display='none');
+  document.querySelector('.lgpd').style.display='none';
+  document.getElementById('successScreen').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
