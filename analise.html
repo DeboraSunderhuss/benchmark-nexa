@@ -1,1081 +1,217 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel de Análise · Benchmark Remuneração de Escritórios · Nexa</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-:root {
-  --se:#1E3A28; --sp:#4A7459; --sm:#7FA88A; --sc:#C2D9C8; --sf:#EDF4EF;
-  --ow:#F5F3F0; --ambar:#C4710F; --amb-lt:#FBF0E0;
-  --preto:#1A1A1A; --graf:#4A4A4A; --brd:#DDE8DF;
-  --gr:#2D6A4F; --gr-lt:#D8F3DC;
-  --rd:#8B2A2A; --rd-lt:#FFE5E5;
-  --a:#A15C00; --a-lt:#FBF0E0;
-  --fh:'Archivo',sans-serif; --fb:'Plus Jakarta Sans',sans-serif;
-  --r:10px; --sh:0 2px 16px rgba(30,58,40,.08);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--fb);background:var(--ow);color:var(--preto);line-height:1.6;}
-
-/* ── HEADER ── */
-.hdr{background:var(--se);color:#fff;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:200;}
-.brand{display:flex;align-items:center;gap:10px;}
-.bn{font-family:var(--fh);font-size:1.05rem;font-weight:700;}
-.bs{font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;opacity:.55;font-family:var(--fb);}
-.hdr-acts{display:flex;gap:.6rem;}
-.hbtn{background:transparent;color:rgba(255,255,255,.7);font-size:.72rem;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:var(--fb);transition:all .2s;}
-.hbtn:hover{background:rgba(255,255,255,.12);color:#fff;}
-.hbtn.amber{background:rgba(196,113,15,.2);border-color:rgba(196,113,15,.4);color:#E8A84A;}
-
-/* ── HERO ── */
-.hero{background:var(--se);color:#fff;padding:2.5rem 2rem 2rem;position:relative;overflow:hidden;}
-.hero::after{content:'';position:absolute;right:-50px;bottom:-50px;width:260px;height:260px;opacity:.04;
-  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='100' cy='100' r='3' fill='%23fff'/%3E%3Ccircle cx='30' cy='80' r='2.5' fill='%23fff'/%3E%3Ccircle cx='170' cy='50' r='2' fill='%23fff'/%3E%3Ccircle cx='40' cy='155' r='2' fill='%23fff'/%3E%3Ccircle cx='165' cy='150' r='2.5' fill='%23fff'/%3E%3Cline x1='100' y1='100' x2='30' y2='80' stroke='%23fff' stroke-width='1'/%3E%3Cline x1='100' y1='100' x2='170' y2='50' stroke='%23fff' stroke-width='1'/%3E%3Cline x1='100' y1='100' x2='40' y2='155' stroke='%23fff' stroke-width='1'/%3E%3Cline x1='100' y1='100' x2='165' y2='150' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E") center/contain no-repeat;}
-.hero-in{max-width:1200px;margin:0 auto;position:relative;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.25rem;}
-.hero-tag{display:inline-block;background:rgba(196,113,15,.2);border:1px solid rgba(196,113,15,.4);color:#E8A84A;font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:.85rem;font-family:var(--fb);}
-.hero h1{font-family:var(--fh);font-size:clamp(1.35rem,2.6vw,1.85rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.3rem;}
-.hero p{font-size:.82rem;opacity:.6;max-width:420px;}
-.hero-kpis{display:flex;gap:.65rem;flex-wrap:wrap;}
-.hkpi{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:.65rem .9rem;min-width:88px;}
-.hkpi .v{font-family:var(--fh);font-size:1.4rem;font-weight:700;line-height:1;}
-.hkpi .l{font-size:.63rem;opacity:.55;margin-top:.1rem;font-family:var(--fb);}
-.ambar{color:#E8A84A;}
-
-/* ── CFG BANNER ── */
-.cfg-banner{background:var(--amb-lt);border-bottom:2px solid var(--ambar);padding:.65rem 2rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
-.cfg-banner-txt{font-size:.78rem;font-weight:600;color:var(--ambar);font-family:var(--fh);}
-.cfg-banner-sub{font-size:.7rem;color:#7B5500;margin-top:.1rem;font-family:var(--fb);}
-.cfg-arrow{font-size:.85rem;color:var(--ambar);transition:transform .25s;}
-.cfg-arrow.open{transform:rotate(180deg);}
-.cfg-panel{background:#fffdf7;border-bottom:1px solid var(--brd);max-height:0;overflow:hidden;transition:max-height .4s ease;}
-.cfg-panel.open{max-height:9999px;}
-.cfg-inner{max-width:1200px;margin:0 auto;padding:1.5rem 2rem 2rem;}
-.cfg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.6rem;margin-top:.85rem;}
-.cfg-sec{font-size:.7rem;font-weight:700;color:var(--se);text-transform:uppercase;letter-spacing:.08em;margin-top:1.25rem;margin-bottom:.6rem;border-bottom:1px solid var(--brd);padding-bottom:.35rem;font-family:var(--fh);}
-.cfg-sec:first-child{margin-top:0;}
-.cfg-row{background:#fff;border:1px solid var(--brd);border-radius:8px;padding:.65rem .85rem;display:flex;align-items:center;gap:.7rem;}
-.cfg-lbl{font-size:.78rem;color:var(--preto);flex:1;font-family:var(--fb);}
-.cfg-lbl small{display:block;font-size:.68rem;color:var(--sm);}
-.cfg-inp{width:50px;text-align:center;font-family:var(--fh);font-size:.88rem;font-weight:700;color:var(--se);border:1.5px solid var(--brd);border-radius:6px;padding:.28rem;outline:none;background:var(--sf);}
-.cfg-inp:focus{border-color:var(--sp);}
-.bdg{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.67rem;font-weight:600;font-family:var(--fb);}
-.bg{background:var(--gr-lt);color:var(--gr);}
-.ba{background:var(--a-lt);color:var(--a);}
-.br{background:var(--rd-lt);color:var(--rd);}
-.bb{background:var(--sf);color:var(--se);}
-.cfg-apply{background:var(--se);color:#fff;border:none;padding:.65rem 1.35rem;border-radius:8px;font-family:var(--fh);font-size:.82rem;font-weight:600;cursor:pointer;margin-top:1.1rem;transition:background .2s;}
-.cfg-apply:hover{background:var(--sp);}
-.cfg-reset{background:#fff;color:var(--graf);border:1px solid var(--brd);padding:.65rem 1rem;border-radius:8px;font-family:var(--fb);font-size:.8rem;cursor:pointer;margin-top:1.1rem;margin-left:.6rem;}
-
-/* ── TABS ── */
-.tabs-wrap{background:#fff;border-bottom:1px solid var(--brd);position:sticky;top:60px;z-index:190;}
-.tabs{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;overflow-x:auto;}
-.tbtn{border:none;background:none;cursor:pointer;font-family:var(--fb);font-size:.78rem;font-weight:500;color:var(--graf);padding:.8rem .95rem;white-space:nowrap;border-bottom:2.5px solid transparent;transition:all .15s;}
-.tbtn:hover{color:var(--sp);}
-.tbtn.on{color:var(--se);border-bottom-color:var(--sp);}
-
-/* ── LAYOUT ── */
-.wrap{max-width:1200px;margin:0 auto;padding:1.75rem 1.5rem 5rem;}
-.tp{display:none;}.tp.on{display:block;}
-.sh{margin-bottom:1.1rem;}
-.sh h2{font-family:var(--fh);font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.12rem;}
-.sh p{font-size:.8rem;color:var(--sp);}
-
-/* ── GRIDS ── */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem;}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1rem;}
-@media(max-width:860px){.g3{grid-template-columns:1fr 1fr;}.g4{grid-template-columns:1fr 1fr;}}
-@media(max-width:560px){.g2{grid-template-columns:1fr;}.g3{grid-template-columns:1fr;}}
-
-/* ── CARDS ── */
-.card{background:#fff;border:1px solid var(--brd);border-radius:var(--r);padding:1rem;box-shadow:var(--sh);animation:up .3s ease both;}
-@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card h3{font-size:.7rem;font-weight:600;color:var(--sp);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem;font-family:var(--fb);}
-.card .big{font-family:var(--fh);font-size:2rem;font-weight:700;color:var(--se);line-height:1;}
-.card .sub{font-size:.72rem;color:var(--graf);margin-top:.15rem;}
-.cc{background:#fff;border:1px solid var(--brd);border-radius:var(--r);padding:1rem 1.25rem;box-shadow:var(--sh);margin-bottom:1rem;}
-.cc h3{font-size:.76rem;font-weight:600;color:var(--preto);margin-bottom:.85rem;font-family:var(--fh);}
-.cc h3 .sub{font-weight:400;color:var(--sm);font-size:.72rem;}
-.cw{position:relative;}
-
-/* ── KPI BAR ── */
-.kr{display:flex;align-items:center;padding:.45rem 0;border-bottom:1px solid var(--brd);}
-.kr:last-child{border:none;}
-.kl{font-size:.79rem;color:var(--graf);flex:1;}
-.kb{width:90px;height:5px;background:var(--sc);border-radius:3px;margin:0 .55rem;flex-shrink:0;}
-.kf{height:100%;border-radius:3px;}
-.kv{font-size:.76rem;font-weight:700;min-width:30px;text-align:right;font-family:var(--fh);}
-
-/* ── HEAT MAP ── */
-.heat-wrap{overflow-x:auto;}
-.heat-table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:480px;}
-.heat-table th{padding:.55rem .7rem;text-align:center;font-weight:600;font-size:.7rem;color:#fff;background:var(--se);white-space:nowrap;}
-.heat-table th:first-child{text-align:left;min-width:180px;}
-.heat-table td{padding:.5rem .7rem;border-bottom:1px solid var(--brd);text-align:center;vertical-align:middle;}
-.heat-table td:first-child{text-align:left;background:var(--sf);font-weight:500;color:var(--preto);border-right:1px solid var(--brd);}
-.heat-table tr:last-child td{border-bottom:none;}
-.heat-cell{display:inline-flex;align-items:center;justify-content:center;width:100%;border-radius:5px;padding:3px 6px;font-size:.72rem;font-weight:600;font-family:var(--fh);}
-.hc0{background:var(--ow);color:var(--brd);}
-.hc1{background:#D1FAE5;color:#065F46;}
-.hc2{background:#A7F3D0;color:#065F46;}
-.hc3{background:#6EE7B7;color:#064E3B;}
-.hc4{background:#34D399;color:#022C22;}
-.hc5{background:#10B981;color:#fff;}
-
-/* ── CROSS TABLE ── */
-.cross-wrap{overflow-x:auto;}
-.ct{width:100%;border-collapse:collapse;font-size:.78rem;}
-.ct th{padding:.55rem .75rem;text-align:left;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--sp);border-bottom:2px solid var(--brd);font-family:var(--fb);}
-.ct td{padding:.6rem .75rem;border-bottom:1px solid var(--brd);color:var(--graf);vertical-align:top;}
-.ct tr:last-child td{border-bottom:none;}
-.ct tr:hover td{background:#fafaf8;}
-.cdim{font-weight:600;color:var(--preto);}
-
-/* ── RESP TABLE ── */
-.rt{width:100%;border-collapse:collapse;font-size:.78rem;}
-.rt th{background:var(--se);color:#fff;padding:.55rem .75rem;text-align:left;font-weight:500;font-size:.7rem;font-family:var(--fb);}
-.rt td{padding:.5rem .75rem;border-bottom:1px solid var(--brd);color:var(--graf);vertical-align:top;}
-.rt tr:hover td{background:var(--sf);}
-.rt tr:last-child td{border-bottom:none;}
-
-/* ── MODAL ── */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center;}
-.mo.on{display:flex;}
-.mdl{background:#fff;border-radius:var(--r);padding:1.5rem;max-width:500px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.18);}
-.mdl h3{font-family:var(--fh);font-size:1.1rem;font-weight:700;margin-bottom:.55rem;}
-.mdl p{font-size:.78rem;color:var(--graf);margin-bottom:.8rem;}
-.mdl textarea{width:100%;height:130px;font-family:var(--fb);font-size:.78rem;border:1.5px solid var(--brd);border-radius:8px;padding:.6rem;outline:none;resize:vertical;}
-.mdl textarea:focus{border-color:var(--sp);}
-.mf{display:flex;gap:.6rem;justify-content:flex-end;margin-top:.8rem;}
-.bcn{background:#fff;border:1px solid var(--brd);color:var(--graf);padding:.5rem .9rem;border-radius:7px;font-family:var(--fb);font-size:.78rem;cursor:pointer;}
-.bimp{background:var(--se);color:#fff;border:none;padding:.5rem 1.1rem;border-radius:7px;font-family:var(--fb);font-size:.78rem;font-weight:500;cursor:pointer;}
-
-/* ── EMPTY ── */
-.empty{text-align:center;padding:4rem 2rem;color:var(--graf);}
-.empty .ei{font-size:2rem;margin-bottom:.65rem;}
-.empty h3{font-family:var(--fh);font-size:1.1rem;color:var(--preto);margin-bottom:.35rem;}
-.empty p{font-size:.82rem;margin-bottom:1rem;}
-.empty .cta{display:inline-block;background:var(--se);color:#fff;border-radius:8px;padding:.65rem 1.35rem;font-family:var(--fh);font-size:.82rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;}
-
-/* ── GABARITO ── */
-.gab-card{background:#fff;border:1px solid var(--brd);border-radius:var(--r);padding:.9rem 1.15rem;margin-bottom:.75rem;box-shadow:var(--sh);}
-.gab-card h3{font-size:.76rem;font-weight:600;color:var(--se);margin-bottom:.7rem;font-family:var(--fh);}
-.gt{width:100%;border-collapse:collapse;font-size:.76rem;}
-.gt th{padding:.45rem .7rem;font-size:.66rem;font-weight:600;color:var(--sp);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--brd);text-align:left;font-family:var(--fb);}
-.gt td{padding:.45rem .7rem;border-bottom:1px solid var(--brd);color:var(--graf);}
-.gt tr:last-child td{border-bottom:none;}
-
-/* ── BTNS ── */
-.btn-add{display:inline-flex;align-items:center;gap:.4rem;background:var(--se);color:#fff;border:none;padding:.6rem 1.1rem;border-radius:8px;font-family:var(--fb);font-size:.78rem;font-weight:500;cursor:pointer;transition:background .2s;}
-.btn-add:hover{background:var(--sp);}
-.btn-clr{display:inline-flex;align-items:center;gap:.4rem;background:#fff;color:var(--rd);border:1px solid var(--rd);padding:.6rem .95rem;border-radius:8px;font-family:var(--fb);font-size:.78rem;font-weight:500;cursor:pointer;}
-.btn-clr:hover{background:var(--rd-lt);}
-.btn-exp{display:inline-flex;align-items:center;gap:.4rem;background:#fff;color:var(--sp);border:1px solid var(--sp);padding:.6rem .95rem;border-radius:8px;font-family:var(--fb);font-size:.78rem;font-weight:500;cursor:pointer;}
-.btn-exp:hover{background:var(--sf);}
-
-/* ── NOTE ── */
-.note{background:var(--amb-lt);border-left:3px solid var(--ambar);padding:.65rem .9rem;border-radius:0 8px 8px 0;font-size:.78rem;color:#7B5500;margin-bottom:1rem;font-family:var(--fb);}
-
-.chip{display:inline-block;background:var(--sf);color:var(--sp);border:1px solid var(--sc);border-radius:20px;padding:2px 9px;font-size:.68rem;font-weight:500;margin:2px;font-family:var(--fb);}
-</style>
-</head>
-<body>
-
-<!-- ── HEADER ── -->
-<header class="hdr">
-  <div class="brand">
-    <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
-      <circle cx="20" cy="20" r="2.8" fill="#fff"/>
-      <circle cx="20" cy="20" r="4.8" stroke="#fff" stroke-width="1.1" fill="none"/>
-      <circle cx="7" cy="13" r="2.1" fill="#7FA88A"/>
-      <circle cx="8" cy="29" r="2.1" fill="#7FA88A"/>
-      <circle cx="20" cy="5" r="1.7" fill="#7FA88A"/>
-      <circle cx="33" cy="13" r="2.1" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
-      <circle cx="35" cy="22" r="1.7" stroke="#C2D9C8" stroke-width="1.1" fill="none"/>
-      <line x1="20" y1="20" x2="7" y2="13" stroke="#fff" stroke-width=".9" opacity=".6"/>
-      <line x1="20" y1="20" x2="33" y2="13" stroke="#fff" stroke-width=".9" opacity=".6"/>
-      <line x1="20" y1="20" x2="8" y2="29" stroke="#fff" stroke-width=".9" opacity=".6"/>
-      <line x1="20" y1="20" x2="35" y2="22" stroke="#fff" stroke-width=".9" opacity=".6"/>
-      <line x1="20" y1="20" x2="20" y2="5" stroke="#fff" stroke-width=".9" opacity=".6"/>
-    </svg>
-    <div><div class="bn">Nexa</div><div class="bs">Estratégia &amp; Eficiência</div></div>
-  </div>
-  <div class="hdr-acts">
-    <button class="hbtn amber" onclick="openMo()">+ Importar respostas</button>
-    <button class="hbtn" onclick="exportData()">Exportar JSON</button>
-    <button class="hbtn" onclick="clearD()">Limpar dados</button>
-  </div>
-</header>
-
-<!-- ── HERO ── -->
-<div class="hero">
-  <div class="hero-in">
-    <div>
-      <div class="hero-tag">Painel de análise · Uso interno Nexa</div>
-      <h1>Benchmark: Modelo de remuneração<br>de escritórios jurídicos</h1>
-      <p>Análise consolidada das respostas coletadas. <span id="syncIndicator" style="font-style:italic">↻ Carregando...</span></p>
-      <p style="margin-top:.4rem"><button onclick="fetchFromSheets()" style="background:transparent;border:none;color:rgba(255,255,255,.5);font-size:.72rem;font-family:var(--fb);cursor:pointer;padding:0;text-decoration:underline">Atualizar agora</button></p>
-    </div>
-    <div class="hero-kpis">
-      <div class="hkpi"><div class="v" id="st1">0</div><div class="l">Respondentes</div></div>
-      <div class="hkpi"><div class="v ambar" id="st2">—</div><div class="l">Modelo híbrido</div></div>
-      <div class="hkpi"><div class="v ambar" id="st3">—</div><div class="l">Usam êxito</div></div>
-      <div class="hkpi"><div class="v ambar" id="st4">—</div><div class="l">Satisfação média</div></div>
-      <div class="hkpi"><div class="v ambar" id="st5">—</div><div class="l">Perf. vinculada</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── CONFIG PANEL ── -->
-<div class="cfg-banner" onclick="toggleCfg()">
-  <div>
-    <div class="cfg-banner-txt">⚙ Configurar pesos e classificações do gabarito</div>
-    <div class="cfg-banner-sub">Altere pontuações por resposta, limiares e rótulos. As análises se atualizam automaticamente.</div>
-  </div>
-  <span class="cfg-arrow" id="cfgArrow">▼</span>
-</div>
-<div class="cfg-panel" id="cfgPanel">
-  <div class="cfg-inner">
-    <div class="cfg-sec">Pontuação por dimensão e resposta (0 a 5)</div>
-    <div class="note">Altere os valores numéricos para mudar o peso de cada opção no score. Clique em "Aplicar" para recalcular todas as análises.</div>
-    <div class="cfg-grid" id="cfgGrid"></div>
-    <div class="cfg-sec" style="margin-top:1.5rem">Limiares de maturidade</div>
-    <div class="cfg-grid" id="cfgThresh"></div>
-    <div>
-      <button class="cfg-apply" onclick="applyConfig()">Aplicar configurações</button>
-      <button class="cfg-reset" onclick="resetConfig()">Restaurar padrões</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── TABS ── -->
-<div class="tabs-wrap">
-  <div class="tabs">
-    <button class="tbtn on"  onclick="tab('visao',this)">Visão geral</button>
-    <button class="tbtn"     onclick="tab('modelos',this)">Modelos</button>
-    <button class="tbtn"     onclick="tab('exito',this)">Êxito</button>
-    <button class="tbtn"     onclick="tab('performance',this)">Performance</button>
-    <button class="tbtn"     onclick="tab('acordos',this)">Acordos</button>
-    <button class="tbtn"     onclick="tab('satisfacao',this)">Satisfação</button>
-    <button class="tbtn"     onclick="tab('governanca',this)">Governança</button>
-    <button class="tbtn"     onclick="tab('respostas',this)">Respostas</button>
-    <button class="tbtn"     onclick="tab('gabarito',this)">Gabarito</button>
-  </div>
-</div>
-
-<div class="wrap">
-
-<!-- ════ VISÃO GERAL ════ -->
-<div class="tp on" id="tab-visao">
-  <div id="empty-visao" class="empty" style="display:none">
-    <div class="ei">📋</div><h3>Nenhuma resposta ainda</h3>
-    <p>Importe os dados coletados pelo formulário para ver a análise.</p>
-    <button class="cta" onclick="openMo()">+ Importar respostas</button>
-  </div>
-  <div id="content-visao">
-    <div class="sh"><h2>Visão geral</h2><p>Perfil e distribuição das empresas participantes</p></div>
-    <div class="g4">
-      <div class="card"><h3>Respondentes</h3><div class="big" id="k1">0</div><div class="sub">empresas participantes</div></div>
-      <div class="card"><h3>Modelo mais frequente</h3><div class="big" style="font-size:1rem;padding-top:.3rem" id="k2">—</div><div class="sub">modelo predominante</div></div>
-      <div class="card"><h3>Usam êxito</h3><div class="big" id="k3">—</div><div class="sub">da amostra</div></div>
-      <div class="card"><h3>Satisfação média</h3><div class="big" id="k4">—</div><div class="sub">escala 1 a 5</div></div>
-    </div>
-    <div class="g2">
-      <div class="cc"><h3>Distribuição por porte</h3><div class="cw" style="height:190px"><canvas id="cPorte"></canvas></div></div>
-      <div class="cc"><h3>Nº de escritórios externos</h3><div class="cw" style="height:190px"><canvas id="cEsc"></canvas></div></div>
-    </div>
-    <div class="cc">
-      <h3>Composição média da carteira contenciosa <span class="sub">(média % entre respondentes)</span></h3>
-      <div class="cw" style="height:200px"><canvas id="cCarteira"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Objetivos da contratação <span class="sub">(% das empresas que citaram)</span></h3>
-      <div id="wObjetivos"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ════ MODELOS ════ -->
-<div class="tp" id="tab-modelos">
-  <div class="sh"><h2>Modelos de remuneração</h2><p>Como as empresas estruturam a remuneração por tipo de contencioso</p></div>
-
-  <div class="cc">
-    <h3>Frequência de uso de cada modelo por tipo de contencioso <span class="sub">(% das empresas que marcaram)</span></h3>
-    <div class="heat-wrap"><table class="heat-table" id="heatModelos"></table></div>
-  </div>
-
-  <div class="cc">
-    <h3>Modelo predominante por tipo de contencioso <span class="sub">(distribuição das respostas)</span></h3>
-    <div class="cw" style="height:260px"><canvas id="cPredAgrupado"></canvas></div>
-  </div>
-
-  <div class="g2">
-    <div class="cc">
-      <h3>Combinação de modelos (híbridos)</h3>
-      <div class="cw" style="height:180px"><canvas id="cHibrido"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Tipos de combinação utilizados <span class="sub">(entre quem usa híbrido)</span></h3>
-      <div id="wCombinacoes"></div>
-    </div>
-  </div>
-
-  <div class="cc">
-    <h3>Critérios para escolha do modelo predominante <span class="sub">(% das empresas que citaram)</span></h3>
-    <div id="wCriterios"></div>
-  </div>
-
-  <div class="cc">
-    <h3>Modelo que tende a crescer nos próximos anos</h3>
-    <div class="cw" style="height:180px"><canvas id="cFuturo"></canvas></div>
-  </div>
-</div>
-
-<!-- ════ ÊXITO ════ -->
-<div class="tp" id="tab-exito">
-  <div class="sh"><h2>Honorário de êxito</h2><p>Adoção, percentuais praticados e peso na remuneração total</p></div>
-
-  <div class="cc">
-    <h3>Adoção de honorário de êxito por tipo de contencioso <span class="sub">(% das empresas)</span></h3>
-    <div class="heat-wrap"><table class="heat-table" id="heatExito"></table></div>
-  </div>
-
-  <div class="g2">
-    <div class="cc">
-      <h3>Cobertura da carteira com previsão de êxito</h3>
-      <div class="cw" style="height:210px"><canvas id="cExitoPct"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Percentual de êxito normalmente praticado</h3>
-      <div class="cw" style="height:210px"><canvas id="cExitoPerc"></canvas></div>
-    </div>
-  </div>
-</div>
-
-<!-- ════ PERFORMANCE ════ -->
-<div class="tp" id="tab-performance">
-  <div class="sh"><h2>Performance</h2><p>SLA, prazo, produtividade e qualidade técnica vinculados à remuneração</p></div>
-
-  <div class="g2">
-    <div class="cc">
-      <h3>Performance influencia remuneração?</h3>
-      <div class="cw" style="height:190px"><canvas id="cPerfI"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Tipo de remuneração variável</h3>
-      <div class="cw" style="height:190px"><canvas id="cRemunVar"></canvas></div>
-    </div>
-  </div>
-
-  <div class="cc">
-    <h3>Indicadores utilizados para avaliação de performance <span class="sub">(% das empresas)</span></h3>
-    <div id="wKpis"></div>
-  </div>
-
-  <div class="cc">
-    <h3>Frequência de avaliação de performance</h3>
-    <div class="cw" style="height:175px"><canvas id="cFreqAval"></canvas></div>
-  </div>
-
-  <div class="cc">
-    <h3>Limitações do modelo atual <span class="sub">(% das empresas que citaram)</span></h3>
-    <div id="wLimitacoes"></div>
-  </div>
-</div>
-
-<!-- ════ ACORDOS ════ -->
-<div class="tp" id="tab-acordos">
-  <div class="sh"><h2>Gestão de acordos</h2><p>Modelos de remuneração e especialização na negociação</p></div>
-
-  <div class="g2">
-    <div class="cc">
-      <h3>Remuneração específica para acordos</h3>
-      <div class="cw" style="height:200px"><canvas id="cAcordoRemun"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Quem conduz a negociação dos acordos</h3>
-      <div class="cw" style="height:200px"><canvas id="cAcordoCond"></canvas></div>
-    </div>
-  </div>
-
-  <div class="cc">
-    <h3>Percentual praticado sobre o saving nos acordos</h3>
-    <div class="cw" style="height:175px"><canvas id="cAcordoPerc"></canvas></div>
-  </div>
-</div>
-
-<!-- ════ SATISFAÇÃO ════ -->
-<div class="tp" id="tab-satisfacao">
-  <div class="sh"><h2>Satisfação com o modelo</h2><p>Cruzamento entre objetivo da empresa, modelo adotado e satisfação percebida</p></div>
-
-  <div class="g2">
-    <div class="cc">
-      <h3>Distribuição de satisfação <span class="sub">(escala 1 a 5)</span></h3>
-      <div class="cw" style="height:200px"><canvas id="cSatisfacaoDist"></canvas></div>
-    </div>
-    <div class="cc">
-      <h3>Satisfação média por modelo predominante</h3>
-      <div class="cw" style="height:200px"><canvas id="cSatisfacaoModelo"></canvas></div>
-    </div>
-  </div>
-
-  <div class="cc">
-    <h3>Cruzamento: objetivo principal × satisfação média</h3>
-    <div class="cross-wrap">
-      <table class="ct"><thead><tr>
-        <th>Objetivo principal</th>
-        <th>Nº empresas</th>
-        <th>Modelo mais frequente</th>
-        <th>Satisfação média</th>
-      </tr></thead>
-      <tbody id="crossObjSat"></tbody></table>
-    </div>
-  </div>
-
-  <div class="cc">
-    <h3>Cruzamento: modelo adotado × limitação mais citada</h3>
-    <div class="cross-wrap">
-      <table class="ct"><thead><tr>
-        <th>Modelo predominante</th>
-        <th>Nº empresas</th>
-        <th>Satisfação média</th>
-        <th>Limitação mais citada</th>
-      </tr></thead>
-      <tbody id="crossModeloLim"></tbody></table>
-    </div>
-  </div>
-</div>
-
-<!-- ════ GOVERNANÇA ════ -->
-<div class="tp" id="tab-governanca">
-  <div class="sh"><h2>Governança financeira</h2><p>CAP, reajuste, automação e orçamento</p></div>
-
-  <div class="g3">
-    <div class="cc"><h3>CAP de honorários</h3><div class="cw" style="height:165px"><canvas id="cCap"></canvas></div></div>
-    <div class="cc"><h3>Índice de reajuste</h3><div class="cw" style="height:165px"><canvas id="cIndice"></canvas></div></div>
-    <div class="cc"><h3>Automação de faturas</h3><div class="cw" style="height:165px"><canvas id="cAutoNF"></canvas></div></div>
-  </div>
-
-  <div class="cc"><h3>Orçamento anual com escritórios externos</h3><div class="cw" style="height:165px"><canvas id="cOrcamento"></canvas></div></div>
-</div>
-
-<!-- ════ RESPOSTAS ════ -->
-<div class="tp" id="tab-respostas">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem">
-    <div class="sh" style="margin:0"><h2>Respostas individuais</h2><p>Score calculado com os pesos configurados</p></div>
-    <div style="display:flex;gap:.55rem">
-      <button class="btn-add" onclick="openMo()">+ Importar</button>
-      <button class="btn-exp" onclick="exportData()">Exportar JSON</button>
-      <button class="btn-clr" onclick="clearD()">Limpar</button>
-    </div>
-  </div>
-  <div class="cc" style="padding:0;overflow-x:auto">
-    <table class="rt" id="rtbl"><thead><tr>
-      <th>Empresa</th><th>Porte</th><th>Escritórios</th>
-      <th>Modelo pred.</th><th>Híbrido</th>
-      <th>Êxito (%cart.)</th><th>Perf.→remun.</th>
-      <th>Satisfação</th><th>Score</th><th>Maturidade</th>
-    </tr></thead><tbody id="rtbody"></tbody></table>
-  </div>
-</div>
-
-<!-- ════ GABARITO ════ -->
-<div class="tp" id="tab-gabarito">
-  <div class="sh"><h2>Gabarito de classificação</h2><p>Critérios editáveis no painel de configuração acima</p></div>
-  <div id="gabWrap"></div>
-</div>
-
-</div><!-- /wrap -->
-
-<!-- ── MODAL ── -->
-<div class="mo" id="modal">
-  <div class="mdl">
-    <h3>Importar respostas</h3>
-    <p>Cole o JSON exportado do formulário. Para obter: abra o formulário no navegador onde as respostas foram salvas e execute no console: <code>localStorage.getItem('bench_nexa_v2')</code></p>
-    <textarea id="importTA" placeholder='[{"empresa":"...","modeloPred":...}]'></textarea>
-    <div class="mf">
-      <button class="bcn" onclick="closeMo()">Cancelar</button>
-      <button class="bimp" onclick="doImport()">Importar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ═══════════════════════════════════════════════════════════════════
-// DEFAULT CONFIG
-// ═══════════════════════════════════════════════════════════════════
-const DEFAULT_CONFIG = {
-  scores: {
-    nEsc:          { ate3:3, '4a10':3, '11a20':2, '21a50':1, acima50:0 },
-    perfInfluencia:{ sim:3, nao:0 },
-    remunVar:      { ambos:3, bonus:2, penalidade:2, nao:0 },
-    freqAval:      { trimestral:3, mensal:2, semestral:2, anual:1, nao:0 },
-    cap:           { sim:3, nao:0 },
-    indiceReaj:    { ipca:3, igpm:2, inpc:2, outro:1, nao:1 },
-    autoNF:        { sim:3, em_impl:2, nao:0 },
-    hibrido:       { sim:2, nao:0 },
-    exitoPct:      { acima75:3, '51a75':2, '26a50':1, ate25:1, nao:0 },
-  },
-  thresholds: [
-    { min:18, label:'Avançado',          cls:'bg' },
-    { min:10, label:'Em desenvolvimento', cls:'ba' },
-    { min:0,  label:'Básico',             cls:'br' },
-  ],
-  scoreLabels: {
-    3:{ label:'Best practice', cls:'bg' },
-    2:{ label:'Boa prática',   cls:'ba' },
-    1:{ label:'Neutro',        cls:'ba' },
-    0:{ label:'Gap',           cls:'br' },
-  },
-};
-
-const SCORE_FIELD_NAMES = {
-  nEsc:'Nº escritórios', perfInfluencia:'Performance → Remun.',
-  remunVar:'Remun. variável', freqAval:'Freq. avaliação',
-  cap:'CAP', indiceReaj:'Índice reajuste', autoNF:'Automação NF',
-  hibrido:'Modelo híbrido', exitoPct:'Cobertura êxito',
-};
-
-let CFG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-
-function score(r){
-  return Object.keys(CFG.scores).reduce((s,k)=>s+(CFG.scores[k][r[k]]||0),0);
-}
-function maxScore(){
-  return Object.keys(CFG.scores).reduce((s,k)=>s+Math.max(...Object.values(CFG.scores[k])),0);
-}
-function classify(s){
-  for(const t of CFG.thresholds){ if(s>=t.min) return t; }
-  return CFG.thresholds[CFG.thresholds.length-1];
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// LABELS
-// ═══════════════════════════════════════════════════════════════════
-const LB = {
-  porte:{ ate1bi:'Até R$1bi','1a5bi':'R$1–5bi','5a10bi':'R$5–10bi',acima10bi:'>R$10bi' },
-  nEsc:{ ate3:'Até 3','4a10':'4–10','11a20':'11–20','21a50':'21–50',acima50:'>50' },
-  modeloPred:{ hora:'Hora trabalhada',fixo_carteira:'Fixo carteira',fixo_escopo:'Fixo escopo',por_processo:'Por processo',nova_demanda:'Nova demanda',ato_fase:'Por ato/fase',exito:'Êxito',performance:'Performance' },
-  remunVar:{ bonus:'Bônus',penalidade:'Penalidade',ambos:'Ambos',nao:'Não existe' },
-  freqAval:{ mensal:'Mensal',trimestral:'Trimestral',semestral:'Semestral',anual:'Anual',nao:'Sem avaliação' },
-  autoNF:{ sim:'Sim',em_impl:'Em implant.',nao:'Não' },
-  indiceReaj:{ ipca:'IPCA',igpm:'IGP-M',inpc:'INPC',outro:'Outro',nao:'Sem reajuste' },
-  orcamento:{ ate5M:'Até R$5M','5a20M':'R$5–20M','20a50M':'R$20–50M','50a100M':'R$50–100M',acima100M:'>R$100M' },
-  exitoPct:{ nao:'Não utiliza',ate25:'Até 25%','26a50':'26–50%','51a75':'51–75%',acima75:'>75%' },
-  exitoPerc:{ ate5:'Até 5%','6a10':'6–10%','11a20':'11–20%','21a30':'21–30%',acima30:'>30%',varia:'Varia' },
-  acordoRemun:{ nao:'Não',fixo:'Fixo',var_saving:'Variável s/ saving',fixo_var:'Fixo + variável' },
-  acordoCond:{ mesmo:'Mesmo escritório',outro_esc:'Outro escritório',empresa_esp:'Empresa especial.',hibrido_ac:'Híbrido',outro_ac:'Outro' },
-  acordoPerc:{ ate5:'Até 5%','6a10':'6–10%','11a20':'11–20%','21a30':'21–30%',acima30:'>30%',varia:'Varia',na:'N/A' },
-  modeloFut:{ hibrido:'Híbrido',performance:'Performance',fee_fase:'Por ato/fase',fee_processo:'Por processo',fee_fixo:'Fixo mensal' },
-  objetivos:{ custo:'Redução de custo',previsibilidade:'Previsib. orçamentária',qualidade:'Qualidade técnica',escalabilidade:'Escalabilidade',passivo:'Redução de passivo',especializacao:'Especialização',velocidade:'Velocidade de atend.',outro_obj:'Outro' },
-  criterios:{ red_custo:'Redução de custo',prev_orc:'Previsib. orçamentária',ctrl_fin:'Controle financeiro',alin_inc:'Alinham. de incentivos',comp_risco:'Compartil. de risco',facilidade:'Facilidade de gestão',volume:'Volume de demandas',complexidade:'Complexidade',criticidade:'Criticidade',historico:'Histórico da empresa',outro_crit:'Outro' },
-  kpi:{ qualidade_tec:'Qualidade técnica',taxa_exito:'Taxa de êxito',sla:'SLA',prazo_resp:'Prazo de resposta',produtividade:'Produtividade',orcamento:'Cumprimento orçamento',economia:'Economia gerada',red_contingencias:'Redução contingências',satisfacao_int:'Satisfação interna',outro_kpi:'Outro' },
-  limitacoes:{ baixa_prev:'Baixa previsibilidade',complexidade:'Complexidade de gestão',auditoria:'Dificuldade auditoria',inc_desalin:'Incentivos desalin.',exc_horas:'Incentiva excesso horas',aum_volume:'Incentiva volume',sem_efic:'Sem incentivo eficiência',qual_inc:'Qualidade inconsistente',outro_lim:'Outro' },
-  TIPOS:{ est:'Estratégico',trab:'Trab. Volume',cons:'Cons. Volume',trib:'Tributário',outr:'Outros' },
-  MODELOS_IDS:['hora','fixo_carteira','fixo_escopo','por_processo','nova_demanda','ato_fase','exito','performance'],
-  MODELOS_LBLS:['Hora trab.','Fixo carteira','Fixo escopo','Por processo','Nova demanda','Por ato/fase','Êxito','Performance'],
-};
-function lb(t,v){ return (LB[t]&&LB[t][v])||v||'—'; }
-
-// ═══════════════════════════════════════════════════════════════════
-// PALETA NEXA
-// ═══════════════════════════════════════════════════════════════════
-const P=['#1E3A28','#4A7459','#7FA88A','#C2D9C8','#C4710F','#8C6E4B','#4A4A4A','#2D6A4F'];
-const CD={
-  plugins:{legend:{labels:{font:{family:'Plus Jakarta Sans',size:10},boxWidth:9,padding:9}},
-           tooltip:{titleFont:{family:'Plus Jakarta Sans'},bodyFont:{family:'Plus Jakarta Sans'}}},
-  responsive:true, maintainAspectRatio:false
-};
-const CH={};
-function bar(id,labels,data,opts={}){
-  const ctx=document.getElementById(id); if(!ctx)return;
-  if(CH[id])CH[id].destroy();
-  CH[id]=new Chart(ctx,{type:'bar',
-    data:{labels,datasets:[{data,backgroundColor:opts.colors||P,borderRadius:4,borderSkipped:false}]},
-    options:{...CD,indexAxis:opts.h?'y':'x',
-      plugins:{...CD.plugins,legend:{display:false}},
-      scales:{x:{ticks:{font:{family:'Plus Jakarta Sans',size:10}},grid:{display:false}},
-              y:{ticks:{font:{family:'Plus Jakarta Sans',size:10}},grid:{color:'rgba(0,0,0,.04)'}}}}});
-}
-function pie(id,labels,data,opts={}){
-  const ctx=document.getElementById(id); if(!ctx)return;
-  if(CH[id])CH[id].destroy();
-  CH[id]=new Chart(ctx,{type:opts.d?'doughnut':'pie',
-    data:{labels,datasets:[{data,backgroundColor:opts.colors||P,borderWidth:2,borderColor:'#fff'}]},
-    options:{...CD,cutout:opts.d?'50%':0}});
-}
-function barGroup(id,labels,datasets,opts={}){
-  const ctx=document.getElementById(id); if(!ctx)return;
-  if(CH[id])CH[id].destroy();
-  CH[id]=new Chart(ctx,{type:'bar',
-    data:{labels,datasets},
-    options:{...CD,indexAxis:opts.h?'y':'x',
-      scales:{x:{ticks:{font:{family:'Plus Jakarta Sans',size:9}},grid:{display:false},stacked:false},
-              y:{ticks:{font:{family:'Plus Jakarta Sans',size:9}},grid:{color:'rgba(0,0,0,.04)'}}}}});
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// DATA HELPERS
-// ═══════════════════════════════════════════════════════════════════
-function cnt(d,f){const m={};d.forEach(r=>{const v=r[f];if(v)m[v]=(m[v]||0)+1;});return m;}
-function cntA(d,f){const m={};d.forEach(r=>{(r[f]||[]).forEach(v=>{m[v]=(m[v]||0)+1;});});return m;}
-function pct(n,t){return t?Math.round(n/t*100):0;}
-function avg(arr){ return arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length*10)/10:0; }
-function kbarHtml(items,n){
-  return items.map(([lbl,cnt2])=>{
-    const p=pct(cnt2,n);
-    const col=p>=60?'var(--se)':p>=30?'var(--sp)':'var(--sm)';
-    return `<div class="kr"><span class="kl">${lbl}</span><div class="kb"><div class="kf" style="width:${p}%;background:${col}"></div></div><span class="kv" style="color:${col}">${p}%</span></div>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// MAIN RENDER
-// ═══════════════════════════════════════════════════════════════════
-function render(){
-  const raw=JSON.parse(localStorage.getItem('bench_nexa_v2')||'[]');
-  const n=raw.length;
-  document.getElementById('st1').textContent=n;
-  const mx=maxScore();
-
-  if(n>0){
-    const hibN=raw.filter(r=>r.hibrido==='sim').length;
-    const exitoN=raw.filter(r=>r.exitoPct&&r.exitoPct!=='nao').length;
-    const sats=raw.map(r=>parseInt(r.satisfacao)||0).filter(s=>s>0);
-    const perfN=raw.filter(r=>r.perfInfluencia==='sim').length;
-    const mc=cnt(raw,'modeloPred'); // key is from pred dropdown
-    const topMod=Object.entries(mc).sort((a,b)=>b[1]-a[1])[0];
-
-    document.getElementById('st2').textContent=pct(hibN,n)+'%';
-    document.getElementById('st3').textContent=pct(exitoN,n)+'%';
-    document.getElementById('st4').textContent=sats.length?avg(sats)+'/5':'—';
-    document.getElementById('st5').textContent=pct(perfN,n)+'%';
-    document.getElementById('k1').textContent=n;
-    document.getElementById('k3').textContent=pct(exitoN,n)+'%';
-    document.getElementById('k4').textContent=sats.length?avg(sats)+'/5':'—';
-    if(topMod){
-      const predLbl=lb('modeloPred',topMod[0])||topMod[0];
-      document.getElementById('k2').textContent=predLbl;
-    }
-  }
-
-  n===0 ? showEmpty() : renderAll(raw,n,mx);
-  renderGabarito();
-}
-
-function showEmpty(){
-  document.getElementById('empty-visao').style.display='block';
-  document.getElementById('content-visao').style.display='none';
-}
-
-function renderAll(d,n,mx){
-  document.getElementById('empty-visao').style.display='none';
-  document.getElementById('content-visao').style.display='block';
-  rVisao(d,n); rModelos(d,n); rExito(d,n); rPerf(d,n);
-  rAcordos(d,n); rSatisfacao(d,n); rGov(d,n); rTable(d,mx);
-}
-
-// ── VISÃO GERAL ──────────────────────────────────────────────────
-function rVisao(d,n){
-  const pk=['ate1bi','1a5bi','5a10bi','acima10bi'];
-  pie('cPorte',pk.map(k=>lb('porte',k)),pk.map(k=>cnt(d,'porte')[k]||0),{d:true,colors:P});
-
-  const ek=['ate3','4a10','11a20','21a50','acima50'];
-  bar('cEsc',ek.map(k=>lb('nEsc',k)),ek.map(k=>cnt(d,'nEsc')[k]||0));
-
-  // Carteira média
-  const tipos=['estrategico','trabalhista','consumidor','tributario','outros'];
-  const tipoLbls=['Estratégico','Trab. Volume','Cons. Volume','Tributário','Outros'];
-  const avgs=tipos.map(t=>{
-    const vals=d.map(r=>r.carteira?r.carteira[t]||0:0).filter(v=>v>0);
-    return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;
-  });
-  bar('cCarteira',tipoLbls,avgs,{colors:P});
-
-  // Objetivos
-  const ob=cntA(d,'objetivos');
-  const obKeys=Object.keys(LB.objetivos);
-  const obItems=obKeys.map(k=>[lb('objetivos',k),ob[k]||0]).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('wObjetivos').innerHTML=kbarHtml(obItems,n);
-}
-
-// ── MODELOS ───────────────────────────────────────────────────────
-function rModelos(d,n){
-  const TIPOS_K=['est','trab','cons','trib','outr'];
-  const TIPOS_L=['Estratégico','Trab. Vol.','Cons. Vol.','Tributário','Outros'];
-  const MOD_IDS=LB.MODELOS_IDS;
-  const MOD_LBL=LB.MODELOS_LBLS;
-
-  // Heat map: modelo x tipo, % de empresas que marcaram
-  const tbl=document.getElementById('heatModelos');
-  let html=`<thead><tr><th>Modelo</th>${TIPOS_L.map(l=>`<th>${l}</th>`).join('')}</tr></thead><tbody>`;
-  MOD_IDS.forEach((m,i)=>{
-    html+=`<tr><td>${MOD_LBL[i]}</td>`;
-    TIPOS_K.forEach(t=>{
-      const cnt2=d.filter(r=>r.matrizModelos&&(r.matrizModelos[t]||[]).includes(m)).length;
-      const p=pct(cnt2,n);
-      const cls=p===0?'hc0':p<=20?'hc1':p<=40?'hc2':p<=60?'hc3':p<=80?'hc4':'hc5';
-      html+=`<td><div class="heat-cell ${cls}">${p>0?p+'%':'—'}</div></td>`;
-    });
-    html+=`</tr>`;
-  });
-  html+=`</tbody>`;
-  tbl.innerHTML=html;
-
-  // Pred agrupado: para cada tipo, distribuição dos modelos
-  const predDatasets=TIPOS_K.map((t,ti)=>{
-    const counts=MOD_IDS.map(m=>{
-      return d.filter(r=>r.modeloPred&&r.modeloPred[t]===m).length;
-    });
-    return {label:TIPOS_L[ti],data:counts,backgroundColor:P[ti]};
-  });
-  barGroup('cPredAgrupado',MOD_LBL,predDatasets);
-
-  // Híbrido
-  const hib=cnt(d,'hibrido');
-  pie('cHibrido',['Sim, combina','Não combina'],[hib['sim']||0,hib['nao']||0],
-    {d:true,colors:[P[0],P[2]]});
-
-  // Combinações
-  const comb=cntA(d,'combinacoes');
-  const combKeys=['hora_exito','fixo_exito','fixo_perf','outra_comb'];
-  const combLbls=['Hora trab. + êxito','Fixo + êxito','Fixo + performance','Outra'];
-  const combItems=combKeys.map((k,i)=>[combLbls[i],comb[k]||0]).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('wCombinacoes').innerHTML=kbarHtml(combItems,n);
-
-  // Critérios
-  const cr=cntA(d,'criterios');
-  const crKeys=Object.keys(LB.criterios);
-  const crItems=crKeys.map(k=>[lb('criterios',k),cr[k]||0]).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('wCriterios').innerHTML=kbarHtml(crItems,n);
-
-  // Futuro
-  const fk=['hibrido','performance','fee_fase','fee_processo','fee_fixo'];
-  const fv=cnt(d,'modeloFut');
-  bar('cFuturo',fk.map(k=>lb('modeloFut',k)),fk.map(k=>fv[k]||0),
-    {colors:['#1E3A28','#4A7459','#7FA88A','#C4710F','#8C6E4B']});
-}
-
-// ── ÊXITO ─────────────────────────────────────────────────────────
-function rExito(d,n){
-  const TIPOS_K=['est','trab','cons','trib','outr'];
-  const TIPOS_L=['Estratégico','Trab. Volume','Cons. Volume','Tributário','Outros'];
-
-  // Heat map êxito por tipo (Sim/Não por linha de matriz)
-  const tbl=document.getElementById('heatExito');
-  let html=`<thead><tr><th>Tipo de contencioso</th><th>Sim (%)</th><th>Não (%)</th></tr></thead><tbody>`;
-  TIPOS_K.forEach((t,i)=>{
-    const simN=d.filter(r=>{
-      if(!r.exitoPorTipo) return false;
-      const tr2=r.exitoPorTipo;
-      // look for match by tipo key
-      const key=Object.keys(tr2).find(k=>k===t);
-      return key && tr2[key]==='sim';
-    }).length;
-    const naoN=n-simN;
-    const ps=pct(simN,n); const pn=pct(naoN,n);
-    const cls=ps===0?'hc0':ps<=25?'hc1':ps<=50?'hc2':ps<=75?'hc3':'hc5';
-    html+=`<tr><td>${TIPOS_L[i]}</td>
-      <td><div class="heat-cell ${cls}">${ps>0?ps+'%':'—'}</div></td>
-      <td><div class="heat-cell hc0">${pn>0?pn+'%':'—'}</div></td></tr>`;
-  });
-  html+=`</tbody>`;
-  tbl.innerHTML=html;
-
-  // Cobertura
-  const epk=['nao','ate25','26a50','51a75','acima75'];
-  const epv=cnt(d,'exitoPct');
-  pie('cExitoPct',epk.map(k=>lb('exitoPct',k)),epk.map(k=>epv[k]||0),
-    {colors:['#4A4A4A','#C2D9C8','#7FA88A','#4A7459','#1E3A28']});
-
-  // Percentual praticado
-  const eppk=['ate5','6a10','11a20','21a30','acima30','varia'];
-  const eppv=cnt(d,'exitoPerc');
-  bar('cExitoPerc',eppk.map(k=>lb('exitoPerc',k)),eppk.map(k=>eppv[k]||0),
-    {colors:['#C2D9C8','#7FA88A','#4A7459','#1E3A28','#2D6A4F','#8C6E4B']});
-}
-
-// ── PERFORMANCE ───────────────────────────────────────────────────
-function rPerf(d,n){
-  const pf=cnt(d,'perfInfluencia');
-  pie('cPerfI',['Sim, influencia','Não influencia'],[pf['sim']||0,pf['nao']||0],
-    {d:true,colors:[P[0],P[2]]});
-
-  const rv=cnt(d,'remunVar');
-  pie('cRemunVar',['Bônus','Penalidade','Ambos','Não existe'],
-    [rv['bonus']||0,rv['penalidade']||0,rv['ambos']||0,rv['nao']||0],
-    {colors:[P[2],P[4],P[0],P[6]]});
-
-  const kc=cntA(d,'kpis');
-  const kk=Object.keys(LB.kpi);
-  const kItems=kk.map(k=>[lb('kpi',k),kc[k]||0]).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('wKpis').innerHTML=kbarHtml(kItems,n);
-
-  const fq=cnt(d,'freqAval');
-  bar('cFreqAval',['mensal','trimestral','semestral','anual','nao'].map(k=>lb('freqAval',k)),
-    ['mensal','trimestral','semestral','anual','nao'].map(k=>fq[k]||0),
-    {colors:[P[2],P[0],P[4],P[6],'#aaa']});
-
-  const lm=cntA(d,'limitacoes');
-  const lk=Object.keys(LB.limitacoes);
-  const lItems=lk.map(k=>[lb('limitacoes',k),lm[k]||0]).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('wLimitacoes').innerHTML=kbarHtml(lItems,n);
-}
-
-// ── ACORDOS ───────────────────────────────────────────────────────
-function rAcordos(d,n){
-  const ar=cnt(d,'acordoRemun');
-  pie('cAcordoRemun',['Não','Fixo','Variável s/ saving','Fixo + variável'],
-    [ar['nao']||0,ar['fixo']||0,ar['var_saving']||0,ar['fixo_var']||0],
-    {colors:[P[6],P[2],P[0],P[4]]});
-
-  const ac=cnt(d,'acordoCond');
-  pie('cAcordoCond',['Mesmo escritório','Outro escritório','Empresa especial.','Híbrido','Outro'],
-    ['mesmo','outro_esc','empresa_esp','hibrido_ac','outro_ac'].map(k=>ac[k]||0),
-    {colors:P});
-
-  const apk=['ate5','6a10','11a20','21a30','acima30','varia','na'];
-  const apv=cnt(d,'acordoPerc');
-  bar('cAcordoPerc',apk.map(k=>lb('acordoPerc',k)),apk.map(k=>apv[k]||0));
-}
-
-// ── SATISFAÇÃO ────────────────────────────────────────────────────
-function rSatisfacao(d,n){
-  // Distribuição
-  const sd={};
-  d.forEach(r=>{const v=r.satisfacao;if(v)sd[v]=(sd[v]||0)+1;});
-  bar('cSatisfacaoDist',['1','2','3','4','5'],[1,2,3,4,5].map(v=>sd[v]||0),
-    {colors:['#8B2A2A','#A15C00','#C4710F','#4A7459','#1E3A28']});
-
-  // Média por modelo predominante (usando pred[est] como proxy do modelo principal)
-  const modelos=['hora','fixo_carteira','fixo_escopo','por_processo','nova_demanda','ato_fase','exito','performance'];
-  const modAvgs=modelos.map(m=>{
-    const group=d.filter(r=>r.modeloPred&&Object.values(r.modeloPred).includes(m));
-    const sats=group.map(r=>parseInt(r.satisfacao)||0).filter(s=>s>0);
-    return sats.length?avg(sats):null;
-  });
-  bar('cSatisfacaoModelo',LB.MODELOS_LBLS,modAvgs.map(v=>v||0),
-    {colors:modAvgs.map(v=>v===null?'#ddd':v>=4?'#1E3A28':v>=3?'#4A7459':'#C4710F')});
-
-  // Cruzamento objetivo × satisfação
-  const tbody1=document.getElementById('crossObjSat');
-  const objKeys=Object.keys(LB.objetivos);
-  const rows1=objKeys.map(k=>{
-    const group=d.filter(r=>(r.objetivos||[]).includes(k));
-    if(!group.length) return null;
-    const sats=group.map(r=>parseInt(r.satisfacao)||0).filter(s=>s>0);
-    const satAvg=sats.length?avg(sats):'—';
-    const mc2={}; group.forEach(r=>{ const v=r.modeloPred?Object.values(r.modeloPred)[0]:''; if(v)mc2[v]=(mc2[v]||0)+1; });
-    const topM=Object.entries(mc2).sort((a,b)=>b[1]-a[1])[0];
-    return {k,lbl:lb('objetivos',k),n2:group.length,top:topM?lb('modeloPred',topM[0]):'—',sat:satAvg};
-  }).filter(Boolean).sort((a,b)=>b.n2-a.n2);
-  tbody1.innerHTML=rows1.map(r=>`<tr><td class="cdim">${r.lbl}</td><td>${r.n2}</td><td>${r.top}</td><td>${typeof r.sat==='number'?r.sat+'/5':r.sat}</td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--sm);text-align:center;padding:1rem">Dados insuficientes</td></tr>';
-
-  // Cruzamento modelo × limitação
-  const tbody2=document.getElementById('crossModeloLim');
-  const modAll=['hora','fixo_carteira','fixo_escopo','por_processo','nova_demanda','ato_fase','exito','performance'];
-  const rows2=modAll.map(m=>{
-    const group=d.filter(r=>r.modeloPred&&Object.values(r.modeloPred).includes(m));
-    if(!group.length) return null;
-    const sats=group.map(r=>parseInt(r.satisfacao)||0).filter(s=>s>0);
-    const satAvg=sats.length?avg(sats):'—';
-    const lc={}; group.forEach(r=>(r.limitacoes||[]).forEach(l=>{lc[l]=(lc[l]||0)+1;}));
-    const topL=Object.entries(lc).sort((a,b)=>b[1]-a[1])[0];
-    return {m,n2:group.length,sat:satAvg,lim:topL?lb('limitacoes',topL[0]):'—'};
-  }).filter(Boolean).sort((a,b)=>b.n2-a.n2);
-  tbody2.innerHTML=rows2.map(r=>`<tr><td class="cdim">${lb('modeloPred',r.m)}</td><td>${r.n2}</td><td>${typeof r.sat==='number'?r.sat+'/5':r.sat}</td><td>${r.lim}</td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--sm);text-align:center;padding:1rem">Dados insuficientes</td></tr>';
-}
-
-// ── GOVERNANÇA ────────────────────────────────────────────────────
-function rGov(d,n){
-  const cp=cnt(d,'cap');
-  pie('cCap',['Sim','Não'],[cp['sim']||0,cp['nao']||0],{d:true,colors:[P[0],P[2]]});
-
-  const ind=cnt(d,'indiceReaj');
-  pie('cIndice',['IPCA','IGP-M','INPC','Sem reajuste','Outro'],
-    ['ipca','igpm','inpc','nao','outro'].map(k=>ind[k]||0),{colors:P});
-
-  const at=cnt(d,'autoNF');
-  pie('cAutoNF',['Sim','Em implant.','Não'],[at['sim']||0,at['em_impl']||0,at['nao']||0],
-    {d:true,colors:[P[0],P[4],P[2]]});
-
-  const ok=['ate5M','5a20M','20a50M','50a100M','acima100M'];
-  const ov=cnt(d,'orcamento');
-  bar('cOrcamento',ok.map(k=>lb('orcamento',k)),ok.map(k=>ov[k]||0));
-}
-
-// ── TABLE ─────────────────────────────────────────────────────────
-function rTable(d,mx){
-  document.getElementById('rtbody').innerHTML=d.map(r=>{
-    const s=score(r); const cl=classify(s);
-    const predValues=r.modeloPred?Object.values(r.modeloPred).filter(Boolean):[];
-    const uniq=[...new Set(predValues)];
-    const predChips=uniq.slice(0,2).map(v=>`<span class="chip">${lb('modeloPred',v)}</span>`).join('');
-    return `<tr>
-      <td><strong style="font-family:var(--fh)">${r.empresa}</strong><br><span style="font-size:.7rem;color:var(--sm)">${r.cargo||''}</span></td>
-      <td>${lb('porte',r.porte)}</td>
-      <td>${lb('nEsc',r.nEsc)}</td>
-      <td>${predChips||'—'}</td>
-      <td>${r.hibrido==='sim'?'<span class="bdg bg">Sim</span>':'<span class="bdg br">Não</span>'}</td>
-      <td>${lb('exitoPct',r.exitoPct)||'—'}</td>
-      <td>${r.perfInfluencia==='sim'?'<span class="bdg bg">Sim</span>':'<span class="bdg br">Não</span>'}</td>
-      <td>${r.satisfacao?r.satisfacao+'/5':'—'}</td>
-      <td><strong style="font-family:var(--fh)">${s}/${mx}</strong></td>
-      <td><span class="bdg ${cl.cls}">${cl.label}</span></td>
-    </tr>`;
-  }).join('');
-}
-
-// ── GABARITO ──────────────────────────────────────────────────────
-function renderGabarito(){
-  const mx=maxScore();
-  document.getElementById('gabWrap').innerHTML=Object.entries(CFG.scores).map(([f,opts])=>`
-    <div class="gab-card"><h3>${SCORE_FIELD_NAMES[f]||f}</h3>
-    <table class="gt"><thead><tr><th>Resposta</th><th style="width:80px;text-align:center">Pontuação</th><th>Classificação</th></tr></thead>
-    <tbody>${Object.entries(opts).sort((a,b)=>b[1]-a[1]).map(([v,pts])=>{
-      const sl=CFG.scoreLabels[pts]||{label:'—',cls:'bb'};
-      return `<tr><td style="font-weight:500">${lb(f,v)||v}</td><td style="text-align:center"><span class="bdg ${sl.cls}">${pts}</span></td><td><span class="bdg ${sl.cls}">${sl.label}</span></td></tr>`;
-    }).join('')}</tbody></table></div>`).join('');
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// CONFIG PANEL UI
-// ═══════════════════════════════════════════════════════════════════
-function toggleCfg(){
-  document.getElementById('cfgPanel').classList.toggle('open');
-  document.getElementById('cfgArrow').classList.toggle('open');
-}
-function buildCfgUI(){
-  const sg=document.getElementById('cfgGrid');
-  sg.innerHTML='';
-  Object.entries(CFG.scores).forEach(([f,opts])=>{
-    Object.entries(opts).forEach(([v,pts])=>{
-      const sl=CFG.scoreLabels[pts]||{label:'',cls:'bb'};
-      const div=document.createElement('div'); div.className='cfg-row';
-      div.innerHTML=`<div class="cfg-lbl">${SCORE_FIELD_NAMES[f]||f}<small>${lb(f,v)||v}</small></div>
-        <span class="bdg ${sl.cls} cfg-cls">${sl.label}</span>
-        <input class="cfg-inp" type="number" min="0" max="5" value="${pts}" data-field="${f}" data-val="${v}" oninput="updCfgLbl(this)">`;
-      sg.appendChild(div);
-    });
-  });
-  const tg=document.getElementById('cfgThresh');
-  tg.innerHTML='';
-  CFG.thresholds.forEach((t,i)=>{
-    const div=document.createElement('div'); div.className='cfg-row';
-    div.innerHTML=`<div class="cfg-lbl">Faixa <span class="bdg ${t.cls}">${t.label}</span></div>
-      <span style="font-size:.72rem;color:var(--graf)">≥</span>
-      <input class="cfg-inp" type="number" min="0" max="99" value="${t.min}" data-thresh="${i}" style="width:44px">
-      <input type="text" value="${t.label}" data-thresh-lbl="${i}" style="width:100px;font-family:var(--fb);font-size:.76rem;border:1.5px solid var(--brd);border-radius:6px;padding:.28rem .5rem;outline:none;background:var(--sf)">`;
-    tg.appendChild(div);
-  });
-}
-function updCfgLbl(inp){
-  const pts=parseInt(inp.value)||0;
-  const sl=CFG.scoreLabels[pts]||{label:'?',cls:'bb'};
-  const b=inp.previousElementSibling;
-  b.className=`bdg ${sl.cls} cfg-cls`; b.textContent=sl.label;
-}
-function applyConfig(){
-  document.querySelectorAll('.cfg-inp[data-field]').forEach(i=>{
-    CFG.scores[i.dataset.field][i.dataset.val]=parseInt(i.value)||0;
-  });
-  document.querySelectorAll('.cfg-inp[data-thresh]').forEach(i=>{
-    CFG.thresholds[parseInt(i.dataset.thresh)].min=parseInt(i.value)||0;
-  });
-  document.querySelectorAll('input[data-thresh-lbl]').forEach(i=>{
-    CFG.thresholds[parseInt(i.dataset.threshLbl)].label=i.value||'—';
-  });
-  localStorage.setItem('bench_nexa_cfg_v2',JSON.stringify(CFG));
-  buildCfgUI(); render();
-  const btn=document.querySelector('.cfg-apply');
-  btn.textContent='✓ Aplicado!'; btn.style.background='var(--gr)';
-  setTimeout(()=>{btn.textContent='Aplicar configurações';btn.style.background='';},1600);
-}
-function resetConfig(){
-  if(confirm('Restaurar padrões?')){
-    CFG=JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-    localStorage.removeItem('bench_nexa_cfg_v2');
-    buildCfgUI(); render();
-  }
-}
-function loadConfig(){
-  const s=localStorage.getItem('bench_nexa_cfg_v2');
-  if(s)try{CFG=JSON.parse(s);}catch(e){}
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// UI HELPERS
-// ═══════════════════════════════════════════════════════════════════
-function tab(id,btn){
-  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('tab-'+id).classList.add('on');
-  btn.classList.add('on');
-}
-function openMo(){document.getElementById('modal').classList.add('on');}
-function closeMo(){document.getElementById('modal').classList.remove('on');}
-function doImport(){
-  try{
-    const p=JSON.parse(document.getElementById('importTA').value.trim());
-    if(!Array.isArray(p))throw new Error('Deve ser um array JSON');
-    const e=JSON.parse(localStorage.getItem('bench_nexa_v2')||'[]');
-    localStorage.setItem('bench_nexa_v2',JSON.stringify([...e,...p]));
-    closeMo(); render();
-    alert(p.length+' resposta(s) importada(s) com sucesso.');
-  }catch(err){alert('JSON inválido.\n\n'+err.message);}
-}
-function clearD(){
-  if(confirm('Remover todas as respostas? Esta ação não pode ser desfeita.')){
-    localStorage.removeItem('bench_nexa_v2'); render();
-  }
-}
-function exportData(){
-  const d=localStorage.getItem('bench_nexa_v2')||'[]';
-  const a=document.createElement('a');
-  a.href='data:application/json;charset=utf-8,'+encodeURIComponent(d);
-  a.download='benchmark_nexa_respostas.json';
-  a.click();
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// GOOGLE SHEETS INTEGRATION
-// ═══════════════════════════════════════════════════════════════════
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwAGievduiPxsCP3V4NnZ3DkLqtNY6gyhFL_IiL3zw7s8epixuUiWkvtAxtZX86TYyT/exec';
-
-function fetchFromSheets(){
-  const indicator = document.getElementById('syncIndicator');
-  if(indicator){ indicator.textContent = '↻ Atualizando...'; indicator.style.color='rgba(255,255,255,.5)'; }
-
-  fetch(SHEETS_URL)
-    .then(r => r.json())
-    .then(data => {
-      if(!Array.isArray(data) || data.length === 0){
-        if(indicator){ indicator.textContent = '✓ Sem dados ainda'; indicator.style.color='rgba(255,255,255,.4)'; }
-        render(); return;
-      }
-      // Merge with any local data, deduplicate by id
-      const local = JSON.parse(localStorage.getItem('bench_nexa_v2')||'[]');
-      const allById = {};
-      [...local, ...data].forEach(r => { if(r.id) allById[r.id] = r; });
-      const merged = Object.values(allById);
-      localStorage.setItem('bench_nexa_v2', JSON.stringify(merged));
-      if(indicator){ indicator.textContent = `✓ ${merged.length} resposta(s) · atualizado agora`; indicator.style.color='rgba(255,255,255,.45)'; }
-      render();
-    })
-    .catch(() => {
-      if(indicator){ indicator.textContent = '⚠ Sem conexão — usando dados locais'; indicator.style.color='rgba(255,165,0,.6)'; }
-      render();
-    });
-}
-
-// Auto-refresh every 2 minutes
-setInterval(fetchFromSheets, 120000);
-window.addEventListener('load',()=>{loadConfig();buildCfgUI();fetchFromSheets();});
-</script>
-</body>
-</html>
+Nexa
+Estratégia & Eficiência
++ Importar respostas
+Exportar JSON
+Limpar dados
+Painel de análise · Uso interno Nexa
+Benchmark: Modelo de remuneração
+de escritórios jurídicos
+Análise consolidada das respostas coletadas. ✓ 2 resposta(s) · atualizado agora
+
+Atualizar agora
+
+2
+Respondentes
+50%
+Modelo híbrido
+100%
+Usam êxito
+3/5
+Satisfação média
+0%
+Perf. vinculada
+⚙ Configurar pesos e classificações do gabarito
+Altere pontuações por resposta, limiares e rótulos. As análises se atualizam automaticamente.
+▼
+Pontuação por dimensão e resposta (0 a 5)
+Altere os valores numéricos para mudar o peso de cada opção no score. Clique em "Aplicar" para recalcular todas as análises.
+Nº escritórios
+Até 3
+Best practice
+3
+Nº escritórios
+4–10
+Best practice
+3
+Nº escritórios
+11–20
+Boa prática
+2
+Nº escritórios
+21–50
+Neutro
+1
+Nº escritórios
+>50
+Gap
+0
+Performance → Remun.
+sim
+Best practice
+3
+Performance → Remun.
+nao
+Gap
+0
+Remun. variável
+Ambos
+Best practice
+3
+Remun. variável
+Bônus
+Boa prática
+2
+Remun. variável
+Penalidade
+Boa prática
+2
+Remun. variável
+Não existe
+Gap
+0
+Freq. avaliação
+Trimestral
+Best practice
+3
+Freq. avaliação
+Mensal
+Boa prática
+2
+Freq. avaliação
+Semestral
+Boa prática
+2
+Freq. avaliação
+Anual
+Neutro
+1
+Freq. avaliação
+Sem avaliação
+Gap
+0
+CAP
+sim
+Best practice
+3
+CAP
+nao
+Gap
+0
+Índice reajuste
+IPCA
+Best practice
+3
+Índice reajuste
+IGP-M
+Boa prática
+2
+Índice reajuste
+INPC
+Boa prática
+2
+Índice reajuste
+Outro
+Neutro
+1
+Índice reajuste
+Sem reajuste
+Neutro
+1
+Automação NF
+Sim
+Best practice
+3
+Automação NF
+Em implant.
+Boa prática
+2
+Automação NF
+Não
+Gap
+0
+Modelo híbrido
+sim
+Boa prática
+2
+Modelo híbrido
+nao
+Gap
+0
+Cobertura êxito
+>75%
+Best practice
+3
+Cobertura êxito
+51–75%
+Boa prática
+2
+Cobertura êxito
+26–50%
+Neutro
+1
+Cobertura êxito
+Até 25%
+Neutro
+1
+Cobertura êxito
+Não utiliza
+Gap
+0
+Limiares de maturidade
+Faixa Avançado
+≥
+18
+Avançado
+Faixa Em desenvolvimento
+≥
+10
+Em desenvolvimento
+Faixa Básico
+≥
+0
+Básico
+Aplicar configurações Restaurar padrões
+Visão geral
+Modelos
+Êxito
+Performance
+Acordos
+Satisfação
+Governança
+Respostas
+Gabarito
+Visão geral
+Perfil e distribuição das empresas participantes
+
+Respondentes
+2
+empresas participantes
+Modelo mais frequente
+[object Object]
+modelo predominante
+Usam êxito
+100%
+da amostra
+Satisfação média
+3/5
+escala 1 a 5
+Distribuição por porte
+Nº de escritórios externos
+Composição média da carteira contenciosa (média % entre respondentes)
+Objetivos da contratação (% das empresas que citaram)
+Qualidade técnica
+100%
+Redução de passivo
+100%
+Redução de custo
+50%
+Previsib. orçamentária
+50%
+Escalabilidade
+0%
+Especialização
+0%
+Velocidade de atend.
+0%
+Outro
+0%
